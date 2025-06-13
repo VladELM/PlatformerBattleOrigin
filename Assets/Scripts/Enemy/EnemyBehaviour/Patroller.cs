@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Patroller : MonoBehaviour
 {
@@ -10,14 +11,14 @@ public class Patroller : MonoBehaviour
     private Transform _currentTarget;
     private int _targetIndex;
 
-    public event Action<float> TargetChanged;
+    public event Action<float> PatrolTargetChanged;
 
     public void Initialize(List<Transform> targets)
     {
         _targets = targets;
         _targetIndex = 0;
         _currentTarget = GetTarget();
-        TargetChanged?.Invoke(_currentTarget.position.x);
+        PatrolTargetChanged?.Invoke(_currentTarget.position.x);
     }
 
     public void Patrol()
@@ -31,7 +32,7 @@ public class Patroller : MonoBehaviour
         if (IsDistanceZero())
         {
             _currentTarget = GetTarget();
-            TargetChanged?.Invoke(_currentTarget.position.x);
+            PatrolTargetChanged?.Invoke(_currentTarget.position.x);
         }
     }
 
@@ -39,14 +40,16 @@ public class Patroller : MonoBehaviour
     {
         float offsetY = Math.Abs(Math.Abs(_currentTarget.position.y) - Math.Abs(transform.position.y));
 
-        float targetY = 0;
+        float equalizedTargetY = 0;
 
         if (_currentTarget.position.y > transform.position.y)
-            targetY = _currentTarget.position.y - offsetY;
+            equalizedTargetY = _currentTarget.position.y - offsetY;
         else if (_currentTarget.position.y < transform.position.y)
-            targetY = _currentTarget.position.y + offsetY;
+            equalizedTargetY = _currentTarget.position.y + offsetY;
+        else if (_currentTarget.position.y == transform.position.y)
+            equalizedTargetY = offsetY;
 
-        return targetY;
+        return equalizedTargetY;
     }
 
     private bool IsDistanceZero()
