@@ -8,10 +8,14 @@ public class Coin : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Sprite _coinSprite;
     [SerializeField] float _timeToDelay;
+    [SerializeField] private int _coinCost;
 
     private Coroutine _coroutine;
     private WaitForSeconds _delay;
     private bool _isTimeOut;
+
+    public int CoinCost => _coinCost;
+    public bool IsTimeOut => _isTimeOut;
 
     private void Awake()
     {

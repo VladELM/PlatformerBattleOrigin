@@ -1,21 +1,76 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Haunter : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private float _losingDistance;
 
-    public void Haunt(Transform hauntTarget)
+    private Coroutine _coroutine;
+    private Transform _hauntTarget;
+
+    public event Action<float> HauntingTargetPositionChanged;
+    public event Action HauntingTargetLost;
+
+    public void Initialize(float losingDistance)
     {
-        Vector3 targetPosition = new Vector3(hauntTarget.position.x,
-                                            GetEqualizedTargetY(hauntTarget.position.y),
-                                            hauntTarget.position.z);
+        if (_losingDistance <= losingDistance)
+            _losingDistance = losingDistance + 1;
+    }
+
+    public void AssignHauntTarget(Transform hautTarget)
+    {
+        _hauntTarget = hautTarget;
+    }
+
+    public void StartHaunting(Transform hauntTarget)
+    {
+        _hauntTarget = hauntTarget;
+        _coroutine = StartCoroutine(Haunting());
+    }
+
+    public void StopHaunting()
+    {
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+    }
+
+    private IEnumerator Haunting()
+    {
+        while (enabled)
+        {
+            yield return null;
+
+            HauntingTargetPositionChanged?.Invoke(_hauntTarget.position.x);
+
+            float offset = Vector3.Distance(_hauntTarget.position, transform.position);
+
+            if (offset < _losingDistance)
+            {
+                Haunt();
+            }
+            else if (offset >= _losingDistance)
+            {
+                StopToHaunt();
+                break;
+            }
+        }
+    }
+
+    private void Haunt()
+    {
+        Vector3 targetPosition = new Vector3(_hauntTarget.position.x,
+                        GetEqualizedTargetY(_hauntTarget.position.y),
+                        _hauntTarget.position.z);
 
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
+    }
+
+    private void StopToHaunt()
+    {
+        HauntingTargetLost?.Invoke();
+        _hauntTarget = null;
     }
 
     private float GetEqualizedTargetY(float targetY)

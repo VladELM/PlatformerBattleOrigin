@@ -15,12 +15,12 @@ public class PlayerAnimator : MonoBehaviour
         _movingParameterHashed =  Animator.StringToHash(_movingParameter);
     }
 
-    public void TurnOnMoveMode()
+    public void TurnOnMoveAnimation()
     {
         _animator.SetBool(_movingParameterHashed, true);
     }
 
-    public void TurnOnIdleMode()
+    public void TurnOnIdleAnimation()
     {
         _animator.SetBool(_movingParameterHashed, false);
     }

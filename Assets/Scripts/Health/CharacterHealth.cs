@@ -1,15 +1,29 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 abstract public class CharacterHealth : MonoBehaviour, IDamageable
 {
-    [SerializeField] protected float _health;
+    [SerializeField] protected int _health;
 
-    public void TakeDamage(float incomingDamage)
+    //private Coroutine _coroutine;
+    
+    public int MaxHealth {get; private set;}
+
+    private void Start()
     {
-        _health -= incomingDamage;
-        Debug.Log(_health);
+        MaxHealth = _health;
     }
+
+    public void TakeDamage(int incomingDamage)
+    {
+        if (_health > 0)
+            _health -= incomingDamage;
+    }
+
+    public void StartMonitorHealth()
+    {
+        StartCoroutine(HealthMonitoring());
+    }
+
+    abstract protected IEnumerator HealthMonitoring();
 }

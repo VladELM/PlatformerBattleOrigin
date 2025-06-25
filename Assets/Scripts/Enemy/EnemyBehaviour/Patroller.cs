@@ -1,17 +1,25 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Patroller : MonoBehaviour
 {
+    [SerializeField] private Transform _rayOrigin;
+    [SerializeField] private LayerMask _detectingLayer;
+    [SerializeField] private float _rayDistance;
     [SerializeField] private float _speed;
 
+    private Coroutine _coroutine;
     private List<Transform> _targets;
     private Transform _currentTarget;
     private int _targetIndex;
 
+    public float RayDistance => _rayDistance;
+
     public event Action<float> PatrolTargetChanged;
+    public event Action HauntTargetDetected;
+    public event Action<Transform> HauntTargetGot;
 
     public void Initialize(List<Transform> targets)
     {
@@ -21,11 +29,55 @@ public class Patroller : MonoBehaviour
         PatrolTargetChanged?.Invoke(_currentTarget.position.x);
     }
 
-    public void Patrol()
+    public void StartPatrolling()
+    {
+        PatrolTargetChanged?.Invoke(_currentTarget.position.x);
+        _coroutine = StartCoroutine(Patrolling());
+    }
+
+    public void StopPatrolling()
+    {
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+    }
+
+    private IEnumerator Patrolling()
+    {
+        while (enabled)
+        {
+            yield return null;
+
+            if (IsHostileTargetDetected() == false)
+                Patrol();
+            else
+                break;
+        }
+    }
+
+    private bool IsHostileTargetDetected()
+    {
+        bool isHostileTarget = false;
+        RaycastHit2D hit = Physics2D.Raycast(_rayOrigin.position, _rayOrigin.right,
+                                                _rayDistance, _detectingLayer);
+
+        if (hit.collider)
+        {
+            if (hit.collider.TryGetComponent(out Player component))
+            {
+                HauntTargetDetected?.Invoke();
+                HauntTargetGot?.Invoke(component.transform);
+                isHostileTarget = true;
+            }
+        }
+
+        return isHostileTarget;
+    }
+
+    private void Patrol()
     {
         Vector3 targetPosition = new Vector3(_currentTarget.position.x,
-                                                GetEqualizedTargetY(),
-                                            _currentTarget.position.z);
+                                        GetEqualizedTargetY(),
+                                    _currentTarget.position.z);
 
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
 

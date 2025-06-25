@@ -10,6 +10,7 @@ public class InputReader : MonoBehaviour
     public bool IsIdleLeft { get; private set; }
     public bool IsIdleRight { get; private set; }
     public bool IsJump { get; private set; }
+    public bool IsAttack { get; private set; }
 
     private void Update()
     {
@@ -22,5 +23,6 @@ public class InputReader : MonoBehaviour
         IsIdleRight = Input.GetKeyUp(Constants.ButtonD);
 
         IsJump = Input.GetKey(Constants.ButtonSpace);
+        IsAttack = Input.GetKeyDown(Constants.ButtonRightShift);
     }
 }
