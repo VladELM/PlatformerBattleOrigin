@@ -10,7 +10,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rotator))]
 [RequireComponent(typeof(EnemyHealth))]
 [RequireComponent(typeof(EnemyKiller))]
-
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Patroller _patroller;
@@ -27,17 +26,17 @@ public class Enemy : MonoBehaviour
     private void OnDestroy()
     {
         _patroller.PatrolTargetChanged -= _enemyRotator.RotateEnemy;
-        _patroller.HauntTargetDetected -= _enemyAlertSign.SetActiveAlertTarget;
+        _patroller.HauntTargetDetected -= _enemyAlertSign.TurnOnAlertTarget;
         _patroller.HauntTargetGot -= _haunter.StartHaunting;
 
         _haunter.HauntingTargetPositionChanged += _enemyRotator.RotateEnemy;
-        _haunter.HauntingTargetLost -= _enemyAlertSign.SetUnactiveAlertTarget;
+        _haunter.HauntingTargetLost -= _enemyAlertSign.TurnOffAlertTarget;
         _haunter.HauntingTargetLost -= _patroller.StartPatrolling;
 
         _enemyAttackCollider.AttackTargetDetected -= _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected -= _haunter.StopHaunting;
         _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.ToggleAttackAnimation;
-        _enemyAttackCollider.AttackTargetDetected -= _enemyAlertSign.SetActiveAlertTarget;
+        _enemyAttackCollider.AttackTargetDetected -= _enemyAlertSign.TurnOnAlertTarget;
         _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.StartAttack;
 
         _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.ToggleAttackAnimation;
@@ -65,17 +64,17 @@ public class Enemy : MonoBehaviour
         _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
 
         _patroller.PatrolTargetChanged += _enemyRotator.RotateEnemy;
-        _patroller.HauntTargetDetected += _enemyAlertSign.SetActiveAlertTarget;
+        _patroller.HauntTargetDetected += _enemyAlertSign.TurnOnAlertTarget;
         _patroller.HauntTargetGot += _haunter.StartHaunting;
 
         _haunter.HauntingTargetPositionChanged += _enemyRotator.RotateEnemy;
-        _haunter.HauntingTargetLost += _enemyAlertSign.SetUnactiveAlertTarget;
+        _haunter.HauntingTargetLost += _enemyAlertSign.TurnOffAlertTarget;
         _haunter.HauntingTargetLost += _patroller.StartPatrolling;
 
         _enemyAttackCollider.AttackTargetDetected += _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected += _haunter.StopHaunting;
         _enemyAttackCollider.AttackTargetDetected += _enemyAnimation.ToggleAttackAnimation;
-        _enemyAttackCollider.AttackTargetDetected += _enemyAlertSign.SetActiveAlertTarget;
+        _enemyAttackCollider.AttackTargetDetected += _enemyAlertSign.TurnOnAlertTarget;
         _enemyAttackCollider.AttackTargetGot += _enemyAttacker.StartAttack;
 
         _enemyAttackCollider.HostileTargetLeft += _enemyAnimation.ToggleAttackAnimation;

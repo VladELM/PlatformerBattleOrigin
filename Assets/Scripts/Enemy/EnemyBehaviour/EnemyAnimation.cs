@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-
 public class EnemyAnimation : MonoBehaviour
 {
     [SerializeField] private string _attackingParameter;

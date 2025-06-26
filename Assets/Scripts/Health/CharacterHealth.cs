@@ -1,11 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-abstract public class CharacterHealth : MonoBehaviour, IDamageable
+public abstract class CharacterHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] protected int _health;
-
-    //private Coroutine _coroutine;
     
     public int MaxHealth {get; private set;}
 
@@ -22,8 +20,8 @@ abstract public class CharacterHealth : MonoBehaviour, IDamageable
 
     public void StartMonitorHealth()
     {
-        StartCoroutine(HealthMonitoring());
+        StartCoroutine(MonitoringHealth());
     }
 
-    abstract protected IEnumerator HealthMonitoring();
+    protected abstract IEnumerator MonitoringHealth();
 }

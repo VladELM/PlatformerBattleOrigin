@@ -1,39 +1,25 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemiesSpawner : MonoBehaviour
+public class EnemiesSpawner : Spawner
 {
     [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField] private List<EnemySpawnPoint> _spawnPoints;
 
     private void Awake()
     {
-        SpawnEnemies();
+        Spawn();
     }
 
-    private void SpawnEnemies()
+    protected override void Spawn()
     {
         for (int i = 0; i < _spawnPoints.Count; i++)
         {
-            Enemy enemy = Instantiate(_enemyPrefab);
-            enemy.Initialize(_spawnPoints[i].transform.position, _spawnPoints[i].GetPatrolPoints());
+            if (_spawnPoints[i].TryGetComponent(out EnemySpawnPoint enemySpawnPoint))
+            {
+                Enemy enemy = Instantiate(_enemyPrefab);
+                enemy.Initialize(_spawnPoints[i].transform.position, enemySpawnPoint.GetPatrolPoints());
+            }
         }
+
+        _spawnPoints.Clear();
     }
-
-    #if UNITY_EDITOR
-    [ContextMenu("FillSpanwPointsList")]
-    private void FillSpanwPointsList()
-    {
-        int childAmount = transform.childCount;
-
-        for (int i = 0; i < childAmount; i++)
-        {
-            Transform child = transform.GetChild(i);
-
-            if (child.TryGetComponent(out EnemySpawnPoint enemySpawnPoint))
-                _spawnPoints.Add(enemySpawnPoint);
-        }
-    }
-
-    #endif
 }

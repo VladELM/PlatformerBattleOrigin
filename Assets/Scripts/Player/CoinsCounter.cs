@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CoinsCount : MonoBehaviour
+public class CoinsCounter : MonoBehaviour
 {
     private int _coins;
 

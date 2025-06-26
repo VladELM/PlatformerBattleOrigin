@@ -7,11 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent (typeof(PlayerHealth))]
 [RequireComponent(typeof(HeallerCollector))]
-[RequireComponent(typeof(CoinsCount))]
+[RequireComponent(typeof(CoinsCounter))]
 [RequireComponent(typeof(CoinCollector))]
 [RequireComponent (typeof(PlayerAttackCollider))]
 [RequireComponent (typeof(PlayerAttacker))]
-
 public class Player : MonoBehaviour
 {
     private InputReader _inputReader;
@@ -21,7 +20,7 @@ public class Player : MonoBehaviour
     private PlayerAnimator _playerAnimator;
     private PlayerHealth _playerHealth;
     private HeallerCollector _heallerCollector;
-    private CoinsCount _coinsCount;
+    private CoinsCounter _coinsCount;
     private CoinCollector _coinCollector;
     private PlayerAttacker _playerAttacker;
     private PlayerAttackCollider _playerAttackCollider;
@@ -35,7 +34,7 @@ public class Player : MonoBehaviour
         _playerAnimator = GetComponent<PlayerAnimator>();
         _playerHealth = GetComponent<PlayerHealth>();
         _heallerCollector = GetComponent<HeallerCollector>();
-        _coinsCount = GetComponent<CoinsCount>();
+        _coinsCount = GetComponent<CoinsCounter>();
         _coinCollector = GetComponent<CoinCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();
         _playerAttacker = GetComponent<PlayerAttacker>();

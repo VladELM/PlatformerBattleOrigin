@@ -2,12 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-
 public class Coin : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Sprite _coinSprite;
-    [SerializeField] float _timeToDelay;
+    [SerializeField] private float _timeToDelay;
     [SerializeField] private int _coinCost;
 
     private Coroutine _coroutine;
@@ -44,6 +43,6 @@ public class Coin : MonoBehaviour
         yield return _delay;
 
         _isTimeOut = true;
-        _spriteRenderer.sprite = _coinSprite; ;
+        _spriteRenderer.sprite = _coinSprite;
     }
 }

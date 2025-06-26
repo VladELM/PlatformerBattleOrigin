@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
-
 public class GroundChecker : MonoBehaviour
 {
     [SerializeField] private LayerMask _layerMask;

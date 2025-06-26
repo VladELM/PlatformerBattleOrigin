@@ -19,7 +19,7 @@ public class Haunter : MonoBehaviour
             _losingDistance = losingDistance + 1;
     }
 
-    public void AssignHauntTarget(Transform hautTarget)
+    public void SetHauntTarget(Transform hautTarget)
     {
         _hauntTarget = hautTarget;
     }

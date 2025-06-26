@@ -24,8 +24,17 @@ public class HeallerSpawnPoint : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        _leftValueX = (values[0] < values[1]) ? values[0] : values[1];
-        _rightValueX = (values[1] > values[0]) ? values[1] : values[0];
+        if (values[0] < values[1])
+        {
+            _leftValueX = values[0];
+            _rightValueX = values[1];
+        }
+        else if (values[0] > values[1])
+        {
+            _leftValueX = values[1];
+            _rightValueX = values[0];
+        }
+
         ValueY = transform.position.y;
     }
 

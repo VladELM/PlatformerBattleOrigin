@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private string _movingParameter;

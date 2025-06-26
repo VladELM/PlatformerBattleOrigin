@@ -57,10 +57,10 @@ public class HeallerSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(Range(_minDelay, _maxDelay));
 
-        GetHealler();
+        TakeHeallerFromPool();
     }
 
-    private void GetHealler()
+    private void TakeHeallerFromPool()
     {
         Healler healler = _heallersPool.Dequeue();
 

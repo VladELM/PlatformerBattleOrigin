@@ -5,7 +5,7 @@ public class EnemyHealth : CharacterHealth
 {
     public event Action HealthBecameEmpty;
 
-    protected override IEnumerator HealthMonitoring()
+    protected override IEnumerator MonitoringHealth()
     {
         while (enabled)
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerHealth : CharacterHealth
 {
-    protected override IEnumerator HealthMonitoring()
+    protected override IEnumerator MonitoringHealth()
     {
         while (enabled)
         {
