@@ -8,7 +8,6 @@ public class EnemyAnimation : MonoBehaviour
 
     private Animator _animator;
     private int _attackingParameterHashed;
-    private bool _isAttacking;
     private int _deathParameterHashed;
 
     private void Awake()
@@ -16,18 +15,20 @@ public class EnemyAnimation : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         _attackingParameterHashed = Animator.StringToHash(_attackingParameter);
-        _isAttacking = false;
-
         _deathParameterHashed = Animator.StringToHash(_deathParameter);
     }
 
-    public void ToggleAttackAnimation()
+    public void TurnOnAttackAnimation()
     {
-        _isAttacking = !_isAttacking;
-        _animator.SetBool(_attackingParameterHashed, _isAttacking);
+        _animator.SetBool(_attackingParameterHashed, true);
     }
 
-    public void PlayDeathAnimation()
+    public void TurnOffAttackAnimation()
+    {
+        _animator.SetBool(_attackingParameterHashed, false);
+    }
+
+    public void TurnOnDeathAnimation()
     {
         _animator.SetBool(_deathParameterHashed, true);
     }

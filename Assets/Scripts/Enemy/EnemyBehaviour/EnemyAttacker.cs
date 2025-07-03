@@ -15,7 +15,7 @@ public class EnemyAttacker : MonoBehaviour
         _delay = new WaitForSeconds(_delayValue);
     }
 
-    public void StartAttack(IDamageable attackTarget)
+    public void StartAttack(IDamageable attackTarget, float valueY)
     {
         _attackTarget = attackTarget;
         _attackCoroutine = StartCoroutine(Attacking());

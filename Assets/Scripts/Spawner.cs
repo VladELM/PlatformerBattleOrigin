@@ -5,11 +5,11 @@ public abstract class Spawner : MonoBehaviour
 {
     [SerializeField] protected List<Transform> _spawnPoints;
 
-    protected abstract void Spawn();
+    protected abstract void SpawnOnStart();
 
 #if UNITY_EDITOR
     [ContextMenu("FillSpanwPointsList")]
-    protected void FillSpawnPointsList()
+    private void FillSpawnPointsList()
     {
         int childAmount = transform.childCount;
 

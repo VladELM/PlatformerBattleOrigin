@@ -2447,9 +2447,11 @@ GameObject:
   - component: {fileID: 7900346439310676113}
   - component: {fileID: 2183091748424460064}
   - component: {fileID: 5876050731550424343}
+  - component: {fileID: 1753196121533667373}
+  - component: {fileID: -7509931097235935212}
   m_Layer: 6
   m_Name: skeleton with sword (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2500,7 +2502,7 @@ Animator:
   m_GameObject: {fileID: 7781402733167295398}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6dde9cf396dc23c40957a8e98322fe7f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1abce78b30e76ae408e6841935df0e75, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2591,6 +2593,7 @@ MonoBehaviour:
   _enemyAnimation: {fileID: 5308915884976251167}
   _enemyAlertSign: {fileID: 8224218212636906806}
   _enemyHealth: {fileID: 7900346439310676113}
+  _itemsCollector: {fileID: 0}
   _enemyKiller: {fileID: 5876050731550424343}
 --- !u!114 &2369956900197989283
 MonoBehaviour:
@@ -2688,7 +2691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bece16e94f1dac499930b6a1eba32a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 50
+  _healthValue: 10
 --- !u!114 &2183091748424460064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2714,6 +2717,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _delay: 1.2
+--- !u!114 &1753196121533667373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781402733167295398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9069c6e31858e0b4689ba29c81b1f69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-7509931097235935212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781402733167295398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71676c0e53dfa946ad9db5d953d69d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8211842560489297303
 GameObject:
   m_ObjectHideFlags: 0

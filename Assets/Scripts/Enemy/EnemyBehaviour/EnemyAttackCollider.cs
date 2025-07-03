@@ -5,30 +5,30 @@ public class EnemyAttackCollider : MonoBehaviour
 {
     private bool _isCollisionPossible;
 
-    public event Action<IDamageable> AttackTargetGot;
+    public event Action<IDamageable, float> AttackTargetGot;
     public event Action AttackTargetDetected;
     public event Action<Transform> ExitedTargetGot;
     public event Action HostileTargetLeft;
 
-    private void Start()
+    //private void Start()
+    //{
+    //    _isCollisionPossible = true;
+    //}
+
+    private void OnEnable()
     {
         _isCollisionPossible = true;
-    }
-
-    public void TurnOnCollision()
-    {
-        _isCollisionPossible = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_isCollisionPossible)
         {
-            if (collision.gameObject.TryGetComponent(out AttackTrigger attackTrigger))
+            if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
             {
                 if (attackTrigger.TryGetComponent(out PlayerHealth playerHealth))
                 {
-                    AttackTargetGot?.Invoke(playerHealth);
+                    AttackTargetGot?.Invoke(playerHealth, playerHealth.transform.position.y);
                     AttackTargetDetected?.Invoke();
                 }
             }
@@ -39,7 +39,7 @@ public class EnemyAttackCollider : MonoBehaviour
     {
         if (_isCollisionPossible)
         {
-            if (collision.gameObject.TryGetComponent(out AttackTrigger attackTrigger))
+            if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
             {
                 if (attackTrigger.TryGetComponent(out Player player))
                 {
@@ -48,5 +48,10 @@ public class EnemyAttackCollider : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void TurnOnCollision()
+    {
+        _isCollisionPossible = false;
     }
 }

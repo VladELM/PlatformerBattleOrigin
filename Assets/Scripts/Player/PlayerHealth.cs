@@ -1,27 +1,23 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerHealth : CharacterHealth
+public class PlayerHealth : Health
 {
+    public void StartMonitorHealth()
+    {
+        StartCoroutine(MonitoringHealth());
+    }
+
     protected override IEnumerator MonitoringHealth()
     {
         while (enabled)
         {
             yield return null;
 
-            if (_health <= 0)
-                Debug.Log("You are undead...");
-            else
-                Debug.Log("You are alive !");
-        }
-    }
-
-    public void RestoreHealth(int healPoints, IHealable healable)
-    {
-        if ((healPoints + _health) <= MaxHealth)
-        {
-            _health += healPoints;
-            healable.DeactivateHealler();
+            //if (_healthValue <= 0)
+            //    Debug.Log("You are undead...");
+            //else
+            //    Debug.Log("You are alive !");
         }
     }
 }

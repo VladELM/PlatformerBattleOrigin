@@ -8,17 +8,22 @@ public class HeallerSpawner : MonoBehaviour
     [SerializeField] private Healler _heallerPrefab;
     [SerializeField] private int _maxPoolSize;
     [SerializeField] private int _activeHeallersAmount;
-    [SerializeField] private int _minDelay;
-    [SerializeField] private int _maxDelay;
+    [SerializeField] protected int _minDelay;
+    [SerializeField] protected int _maxDelay;
     [SerializeField] private List<HeallerSpawnPoint> _heallerSpawnPoints;
 
     private Queue<Healler> _heallersPool;
 
     private void Awake()
     {
+        SpawnOnStart();
+    }
+
+    private void SpawnOnStart()
+    {
         _heallersPool = new Queue<Healler>();
         int spawnPointsAmount = _heallerSpawnPoints.Count;
-        
+
         for (int i = 0; i < spawnPointsAmount; i++)
             _heallerSpawnPoints[i].Initialize();
 
@@ -31,40 +36,40 @@ public class HeallerSpawner : MonoBehaviour
             int index = Range(0, spawnPointsAmount);
             healler.Initialize(_heallerSpawnPoints[index].GetRandomValueX(),
                                 _heallerSpawnPoints[index].ValueY);
-            
-            if (_heallersPool.Count <= _activeHeallersAmount)
-            {
-                healler.HeallerCollected += GiveBackHealler;
-            }
-            else
+
+            if (_heallersPool.Count < _maxPoolSize)
             {
                 healler.gameObject.SetActive(false);
                 _heallersPool.Enqueue(healler);
             }
+            else
+            {
+                healler.HeallerCollected += GiveBack;
+            }
         }
     }
 
-    private void GiveBackHealler(Healler healler)
+    private IEnumerator Spawning()
     {
-        healler.HeallerCollected -= GiveBackHealler;
+        yield return new WaitForSeconds(Range(_minDelay, _maxDelay + 1));
+
+        TakeFromPool();
+    }
+
+    private void GiveBack(Healler healler)
+    {
+        healler.HeallerCollected -= GiveBack;
         healler.gameObject.SetActive(false);
         _heallersPool.Enqueue(healler);
 
         StartCoroutine(Spawning());
     }
 
-    private IEnumerator Spawning()
-    {
-        yield return new WaitForSeconds(Range(_minDelay, _maxDelay));
-
-        TakeHeallerFromPool();
-    }
-
-    private void TakeHeallerFromPool()
+    private void TakeFromPool()
     {
         Healler healler = _heallersPool.Dequeue();
 
-        healler.HeallerCollected += GiveBackHealler;
+        healler.HeallerCollected += GiveBack;
 
         int index = Range(0, _heallerSpawnPoints.Count - 1);
         healler.Initialize(_heallerSpawnPoints[index].GetRandomValueX(),

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class CoinsCounter : MonoBehaviour
 {
-    private int _coins;
+    private int _coinsCount;
 
     private void Start()
     {
-        _coins = 0;
+        _coinsCount = 0;
     }
 
-    public void AddCoin(int coinsAmount)
+    public void AddCoin(int coinCost)
     {
-        _coins += coinsAmount;
+        _coinsCount += coinCost;
     }
 }

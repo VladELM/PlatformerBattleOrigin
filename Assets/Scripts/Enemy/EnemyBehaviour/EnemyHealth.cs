@@ -1,9 +1,20 @@
 using System;
 using System.Collections;
+using UnityEngine;
 
-public class EnemyHealth : CharacterHealth
+public class EnemyHealth : Health
 {
     public event Action HealthBecameEmpty;
+
+    public void Restore()
+    {
+        _healthValue = MaxHealthValue;
+    }
+
+    public void StartMonitorHealth()
+    {
+        StartCoroutine(MonitoringHealth());
+    }
 
     protected override IEnumerator MonitoringHealth()
     {
@@ -11,7 +22,7 @@ public class EnemyHealth : CharacterHealth
         {
             yield return null;
 
-            if (_health <= 0)
+            if (_healthValue <= 0)
             {
                 HealthBecameEmpty?.Invoke();
                 break;

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class EnemyKiller : MonoBehaviour
 {
     [SerializeField] private float _delay;
+
+    public event Action<EnemyKiller> Killed;
 
     public void Kill()
     {
@@ -14,6 +17,6 @@ public class EnemyKiller : MonoBehaviour
     {
         yield return new WaitForSeconds(_delay);
 
-        Destroy(gameObject);
+        Killed?.Invoke(this);
     }
 }

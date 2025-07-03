@@ -6,10 +6,10 @@ public class CoinsSpawner : Spawner
 
     private void Awake()
     {
-        Spawn();
+        SpawnOnStart();
     }
 
-    protected override void Spawn()
+    protected override void SpawnOnStart()
     {
         int spawnPointsAmount = _spawnPoints.Count;
 

@@ -2,29 +2,37 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Coin : MonoBehaviour
+[RequireComponent(typeof(CoinExitTrigger))]
+public class Coin : MonoBehaviour, IEnterable
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private Sprite _coinSprite;
+    [SerializeField] private Sprite _sprite;
     [SerializeField] private float _timeToDelay;
-    [SerializeField] private int _coinCost;
+    [SerializeField] private int _cost;
 
+    private SpriteRenderer _spriteRenderer;
+    private CoinExitTrigger _exitTrigger;
     private Coroutine _coroutine;
     private WaitForSeconds _delay;
     private bool _isTimeOut;
 
-    public int CoinCost => _coinCost;
+    public int Cost => _cost;
     public bool IsTimeOut => _isTimeOut;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _coinSprite = _spriteRenderer.sprite;
+        _exitTrigger = GetComponent<CoinExitTrigger>();
+        _exitTrigger.Exited += Activate;
         _delay = new WaitForSeconds(_timeToDelay);
         _isTimeOut = true;
     }
 
-    public void HideCoin()
+    public void Take(ICollectable collectable)
+    {
+        collectable.Collect(this);
+    }
+
+    public void Disactivate()
     {
         if (_isTimeOut)
             _spriteRenderer.sprite = null;
@@ -32,17 +40,17 @@ public class Coin : MonoBehaviour
             StopCoroutine(_coroutine);
     }
 
-    public void GiveBackCoin()
+    private void Activate()
     {
         _isTimeOut = false;
-        _coroutine = StartCoroutine(Spawning());
+        _coroutine = StartCoroutine(Activating());
     }
 
-    private IEnumerator Spawning()
+    private IEnumerator Activating()
     {
         yield return _delay;
 
         _isTimeOut = true;
-        _spriteRenderer.sprite = _coinSprite;
+        _spriteRenderer.sprite = _sprite;
     }
 }

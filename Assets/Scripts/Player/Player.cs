@@ -6,9 +6,7 @@ using UnityEngine;
 [RequireComponent (typeof(Jumper))]
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent (typeof(PlayerHealth))]
-[RequireComponent(typeof(HeallerCollector))]
 [RequireComponent(typeof(CoinsCounter))]
-[RequireComponent(typeof(CoinCollector))]
 [RequireComponent (typeof(PlayerAttackCollider))]
 [RequireComponent (typeof(PlayerAttacker))]
 public class Player : MonoBehaviour
@@ -19,9 +17,8 @@ public class Player : MonoBehaviour
     private Jumper _jumper;
     private PlayerAnimator _playerAnimator;
     private PlayerHealth _playerHealth;
-    private HeallerCollector _heallerCollector;
     private CoinsCounter _coinsCount;
-    private CoinCollector _coinCollector;
+    private ItemsCollector _itemsCollector;
     private PlayerAttacker _playerAttacker;
     private PlayerAttackCollider _playerAttackCollider;
 
@@ -33,24 +30,23 @@ public class Player : MonoBehaviour
         _jumper = GetComponent<Jumper>();
         _playerAnimator = GetComponent<PlayerAnimator>();
         _playerHealth = GetComponent<PlayerHealth>();
-        _heallerCollector = GetComponent<HeallerCollector>();
         _coinsCount = GetComponent<CoinsCounter>();
-        _coinCollector = GetComponent<CoinCollector>();
+        _itemsCollector = GetComponent<ItemsCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();
         _playerAttacker = GetComponent<PlayerAttacker>();
 
         _playerHealth.StartMonitorHealth();
 
-        _heallerCollector.HeallerDetected += _playerHealth.RestoreHealth;
-        _coinCollector.CoinCollected += _coinsCount.AddCoin;
+        _itemsCollector.HeallerDetected += _playerHealth.Heal;
+        _itemsCollector.CoinCollected += _coinsCount.AddCoin;
         _playerAttackCollider.AttackTargetGot += _playerAttacker.AssignAttackTarget;
         _playerAttackCollider.AttackTargetLost += _playerAttacker.TakeAwayAttackTarget;
     }
 
     private void OnDestroy()
     {
-        _heallerCollector.HeallerDetected -= _playerHealth.RestoreHealth;
-        _coinCollector.CoinCollected -= _coinsCount.AddCoin;
+        _itemsCollector.HeallerDetected -= _playerHealth.Heal;
+        _itemsCollector.CoinCollected -= _coinsCount.AddCoin;
         _playerAttackCollider.AttackTargetGot -= _playerAttacker.AssignAttackTarget;
         _playerAttackCollider.AttackTargetLost -= _playerAttacker.TakeAwayAttackTarget;
     }

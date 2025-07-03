@@ -8,7 +8,7 @@ public class PlayerAttackCollider : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out AttackTrigger attackTrigger))
+        if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
         {
             if (attackTrigger.TryGetComponent(out EnemyHealth enemyHealth))
                 AttackTargetGot?.Invoke(enemyHealth);
@@ -17,7 +17,7 @@ public class PlayerAttackCollider : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out AttackTrigger attackTrigger))
+        if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
             AttackTargetLost?.Invoke();
     }
 }
