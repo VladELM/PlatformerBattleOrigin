@@ -5,15 +5,11 @@ public class EnemyAttackCollider : MonoBehaviour
 {
     private bool _isCollisionPossible;
 
-    public event Action<IDamageable, float> AttackTargetGot;
+    public event Action<IDamageable> AttackTargetGot;
+    public event Action<float> TargetPositionXGot;
     public event Action AttackTargetDetected;
     public event Action<Transform> ExitedTargetGot;
     public event Action HostileTargetLeft;
-
-    //private void Start()
-    //{
-    //    _isCollisionPossible = true;
-    //}
 
     private void OnEnable()
     {
@@ -28,7 +24,8 @@ public class EnemyAttackCollider : MonoBehaviour
             {
                 if (attackTrigger.TryGetComponent(out PlayerHealth playerHealth))
                 {
-                    AttackTargetGot?.Invoke(playerHealth, playerHealth.transform.position.y);
+                    AttackTargetGot?.Invoke(playerHealth);
+                    TargetPositionXGot?.Invoke(playerHealth.transform.position.x);
                     AttackTargetDetected?.Invoke();
                 }
             }

@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(RendererOperator))]
 [RequireComponent(typeof(Patroller))]
 [RequireComponent(typeof(Haunter))]
 [RequireComponent(typeof(EnemyAttacker))]
@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ItemsCollector _itemsCollector;
     [SerializeField] private EnemyKiller _enemyKiller;
 
+    private RendererOperator _rendererOperator;
     private Rotator _enemyRotator;
     private EnemyAttackCollider _enemyAttackCollider;
     private Vector3 _startPosition;
@@ -39,17 +40,17 @@ public class Enemy : MonoBehaviour
 
         _enemyAttackCollider.AttackTargetDetected -= _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected -= _haunter.StopHaunting;
-        _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.TurnOnAttackAnimation;
+        _enemyAttackCollider.TargetPositionXGot -= _enemyRotator.RotateEnemy;
         _enemyAttackCollider.AttackTargetDetected -= _enemyAlertSign.TurnOnAlertSign;
-        _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.StartAttack;
+        _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.AssignAttackTarget;
+        _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.TurnOnAttackAnimation;
 
-        _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.TurnOnAttackAnimation;
-        _enemyAttackCollider.HostileTargetLeft -= _enemyAttacker.StopAttack;
+        _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.TurnOffAttackAnimation;
+        _enemyAttackCollider.HostileTargetLeft -= _enemyAttacker.RemoveAttackTarget;
         _enemyAttackCollider.ExitedTargetGot -= _haunter.StartHaunting;
 
         _enemyHealth.HealthBecameEmpty -= _enemyAttackCollider.TurnOnCollision;
-        _enemyHealth.HealthBecameEmpty -= _enemyAnimation.TurnOnAttackAnimation;
-        _enemyHealth.HealthBecameEmpty -= _enemyAttacker.StopAttack;
+        _enemyHealth.HealthBecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.HealthBecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.HealthBecameEmpty -= _enemyKiller.Kill;
 
@@ -61,6 +62,7 @@ public class Enemy : MonoBehaviour
         transform.position = position;
         _startPosition = position;
 
+        _rendererOperator = GetComponent<RendererOperator>();
         _patroller = GetComponent<Patroller>();
         _haunter = GetComponent<Haunter>();
         _enemyAttacker = GetComponent<EnemyAttacker>();
@@ -71,13 +73,14 @@ public class Enemy : MonoBehaviour
         _enemyRotator = GetComponent<Rotator>();
         _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
 
+        _enemyKiller.Initialize(_enemyAnimation.GetAnimationsLength());
         _haunter.Initialize(_patroller.RayDistance);
         _patroller.Initialize(targets);
+        _rendererOperator.FillRenderersList();
     }
 
     public void RunAfterInitialization()
     {
-        _enemyHealth.StartMonitorHealth();
         _patroller.StartPatrolling();
     }
 
@@ -93,16 +96,17 @@ public class Enemy : MonoBehaviour
 
         _enemyAttackCollider.AttackTargetDetected += _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected += _haunter.StopHaunting;
-        _enemyAttackCollider.AttackTargetDetected += _enemyAnimation.TurnOnAttackAnimation;
+        _enemyAttackCollider.TargetPositionXGot += _enemyRotator.RotateEnemy;
         _enemyAttackCollider.AttackTargetDetected += _enemyAlertSign.TurnOnAlertSign;
-        _enemyAttackCollider.AttackTargetGot += _enemyAttacker.StartAttack;
+        _enemyAttackCollider.AttackTargetGot += _enemyAttacker.AssignAttackTarget;
+        _enemyAttackCollider.AttackTargetDetected += _enemyAnimation.TurnOnAttackAnimation;
 
         _enemyAttackCollider.HostileTargetLeft += _enemyAnimation.TurnOffAttackAnimation;
-        _enemyAttackCollider.HostileTargetLeft += _enemyAttacker.StopAttack;
+        _enemyAttackCollider.HostileTargetLeft += _enemyAttacker.RemoveAttackTarget;
         _enemyAttackCollider.ExitedTargetGot += _haunter.StartHaunting;
 
         _enemyHealth.HealthBecameEmpty += _enemyAttackCollider.TurnOnCollision;
-        _enemyHealth.HealthBecameEmpty += _enemyAttacker.StopAttack;
+        _enemyHealth.HealthBecameEmpty += _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.HealthBecameEmpty += _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.HealthBecameEmpty += _enemyKiller.Kill;
 
@@ -113,8 +117,7 @@ public class Enemy : MonoBehaviour
     {
         transform.position = _startPosition;
         _enemyHealth.Restore();
-        _enemyAlertSign.TurnOffAlertSign();
-        _enemyHealth.StartMonitorHealth();
+        _rendererOperator.TurnOnRenderer();
         _patroller.StartPatrolling();
     }
 
@@ -130,16 +133,17 @@ public class Enemy : MonoBehaviour
 
         _enemyAttackCollider.AttackTargetDetected -= _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected -= _haunter.StopHaunting;
-        _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.TurnOnAttackAnimation;
+        _enemyAttackCollider.TargetPositionXGot -= _enemyRotator.RotateEnemy;
         _enemyAttackCollider.AttackTargetDetected -= _enemyAlertSign.TurnOnAlertSign;
-        _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.StartAttack;
+        _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.AssignAttackTarget;
+        _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.TurnOnAttackAnimation;
 
         _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.TurnOffAttackAnimation;
-        _enemyAttackCollider.HostileTargetLeft -= _enemyAttacker.StopAttack;
+        _enemyAttackCollider.HostileTargetLeft -= _enemyAttacker.RemoveAttackTarget;
         _enemyAttackCollider.ExitedTargetGot -= _haunter.StartHaunting;
 
         _enemyHealth.HealthBecameEmpty -= _enemyAttackCollider.TurnOnCollision;
-        _enemyHealth.HealthBecameEmpty -= _enemyAttacker.StopAttack;
+        _enemyHealth.HealthBecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.HealthBecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.HealthBecameEmpty -= _enemyKiller.Kill;
 

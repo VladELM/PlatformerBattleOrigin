@@ -1,10 +1,12 @@
-using System.Collections;
+using System;
 using UnityEngine;
 
 public abstract class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] protected int _healthValue;
-    
+
+    public event Action HealthBecameEmpty;
+
     public int MaxHealthValue {get; private set;}
 
     private void Awake()
@@ -27,8 +29,8 @@ public abstract class Health : MonoBehaviour, IDamageable
         {
             if (_healthValue > 0)
                 _healthValue -= incomingDamage;
+            else if (_healthValue <= 0)
+                HealthBecameEmpty?.Invoke();
         }
     }
-
-    protected abstract IEnumerator MonitoringHealth();
 }

@@ -65,7 +65,6 @@ public class EnemiesSpawner : Spawner
             enemyKiller.Killed += GiveBack;
             enemy.gameObject.SetActive(true);
             enemy.Subscribe();
-            //enemy.RunAfterPool();
             enemy.Respawn();
         }
     }

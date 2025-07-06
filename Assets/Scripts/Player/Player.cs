@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent (typeof(InputReader))]
@@ -34,8 +35,6 @@ public class Player : MonoBehaviour
         _itemsCollector = GetComponent<ItemsCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();
         _playerAttacker = GetComponent<PlayerAttacker>();
-
-        _playerHealth.StartMonitorHealth();
 
         _itemsCollector.HeallerDetected += _playerHealth.Heal;
         _itemsCollector.CoinCollected += _coinsCount.AddCoin;

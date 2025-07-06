@@ -63,12 +63,12 @@ public class Haunter : MonoBehaviour
 
         int power = 2;
         float offsetSqrt = (float)Math.Pow(offsetX, power) + (float)Math.Pow(offsetY, power);
-        float losingDistanceSqrt = (float)Math.Pow(_losingDistance, power);
+        float losingDistancePow = (float)Math.Pow(_losingDistance, power);
         bool isLosed = false;
 
-        if (offsetSqrt < losingDistanceSqrt)
+        if (offsetSqrt < losingDistancePow)
             isLosed = false;
-        else if (offsetSqrt >= losingDistanceSqrt)
+        else if (offsetSqrt >= losingDistancePow)
             isLosed = true;
 
             return isLosed;
