@@ -5,7 +5,6 @@ public class EnemyAnimation : MonoBehaviour
 {
     [SerializeField] private AnimationClip _deathAnimation;
     [SerializeField] private AnimationClip _ressurectionAnimation;
-    [SerializeField] private AnimationClip _attackAnimation;
     [SerializeField] private string _idleParameter;
     [SerializeField] private string _attackingParameter;
     [SerializeField] private string _deathParameter;

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent (typeof(InputReader))]
-[RequireComponent (typeof(Rotator))]
+[RequireComponent (typeof(Flipper))]
 [RequireComponent (typeof(Mover))]
 [RequireComponent (typeof(Jumper))]
 [RequireComponent(typeof(PlayerAnimator))]
@@ -13,7 +13,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private InputReader _inputReader;
-    private Rotator _rotator;
+    private Flipper _rotator;
     private Mover _mover;
     private Jumper _jumper;
     private PlayerAnimator _playerAnimator;
@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _inputReader = GetComponent<InputReader>();
-        _rotator = GetComponent<Rotator>();
+        _rotator = GetComponent<Flipper>();
         _mover = GetComponent<Mover>();
         _jumper = GetComponent<Jumper>();
         _playerAnimator = GetComponent<PlayerAnimator>();
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
     {
         if (_inputReader.Direction != 0)
         {
-            _rotator.RotatePlayer(_inputReader.Direction);
+            _rotator.Flip(_inputReader.Direction);
             _mover.Move(_inputReader.Direction);
         }
 

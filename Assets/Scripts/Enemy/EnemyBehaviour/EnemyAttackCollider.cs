@@ -25,7 +25,8 @@ public class EnemyAttackCollider : MonoBehaviour
                 if (attackTrigger.TryGetComponent(out PlayerHealth playerHealth))
                 {
                     AttackTargetGot?.Invoke(playerHealth);
-                    TargetPositionXGot?.Invoke(playerHealth.transform.position.x);
+                    TargetPositionXGot?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+                                                                                playerHealth.transform.position.x));
                     AttackTargetDetected?.Invoke();
                 }
             }

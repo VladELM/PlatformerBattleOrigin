@@ -26,12 +26,14 @@ public class Patroller : MonoBehaviour
         _targets = targets;
         _targetIndex = 0;
         _currentTarget = GetTarget();
-        PatrolTargetChanged?.Invoke(_currentTarget.position.x);
+        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+                                                                    _currentTarget.position.x));
     }
 
     public void StartPatrolling()
     {
-        PatrolTargetChanged?.Invoke(_currentTarget.position.x);
+        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+                                                                    _currentTarget.position.x));
         _coroutine = StartCoroutine(Patrolling());
     }
 
@@ -84,7 +86,8 @@ public class Patroller : MonoBehaviour
         if (IsDistanceZero())
         {
             _currentTarget = GetTarget();
-            PatrolTargetChanged?.Invoke(_currentTarget.position.x);
+            PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+                                                                    _currentTarget.position.x));
         }
     }
 

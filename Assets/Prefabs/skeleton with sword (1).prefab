@@ -2594,7 +2594,7 @@ MonoBehaviour:
   _enemyAnimation: {fileID: 5308915884976251167}
   _enemyAlertSign: {fileID: 8224218212636906806}
   _enemyHealth: {fileID: 7900346439310676113}
-  _itemsCollector: {fileID: 0}
+  _itemsCollector: {fileID: 1753196121533667373}
   _enemyKiller: {fileID: 5876050731550424343}
 --- !u!114 &2369956900197989283
 MonoBehaviour:
@@ -2680,6 +2680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _deathAnimation: {fileID: 7400000, guid: 32216f3247cebae41843743d12a4eae9, type: 2}
   _ressurectionAnimation: {fileID: 7400000, guid: 880f1f439dd3f0e44872dad022a1b6e6, type: 2}
+  _attackAnimation: {fileID: 0}
   _idleParameter: IsIdle
   _attackingParameter: IsAttacking
   _deathParameter: IsDead
@@ -2695,7 +2696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bece16e94f1dac499930b6a1eba32a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthValue: 10
+  _healthValue: 50
 --- !u!114 &2183091748424460064
 MonoBehaviour:
   m_ObjectHideFlags: 0

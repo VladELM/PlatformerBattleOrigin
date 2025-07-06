@@ -42,7 +42,8 @@ public class Haunter : MonoBehaviour
         {
             yield return null;
 
-            HauntingTargetPositionChanged?.Invoke(_hauntTarget.position.x);
+            HauntingTargetPositionChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+                                                                    _hauntTarget.position.x));
 
             if (IsLoseDistance())
             {

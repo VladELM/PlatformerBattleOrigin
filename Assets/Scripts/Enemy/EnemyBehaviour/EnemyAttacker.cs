@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyAttacker : MonoBehaviour
@@ -6,19 +7,33 @@ public class EnemyAttacker : MonoBehaviour
     [SerializeField] private float _delayValue;
 
     private IDamageable _attackTarget;
+    private Coroutine _attackCoroutine;
+    private WaitForSeconds _delay;
 
-    public void AssignAttackTarget(IDamageable attackTarget)
+    private void Start()
     {
-        _attackTarget = attackTarget;
+        _delay = new WaitForSeconds(_delayValue);
     }
 
-    public void RemoveAttackTarget()
+    public void StartAttack(IDamageable attackTarget)
     {
+        _attackTarget = attackTarget;
+        _attackCoroutine = StartCoroutine(Attacking());
+    }
+
+    public void StopAttack()
+    {
+        StopCoroutine(_attackCoroutine);
         _attackTarget = null;
     }
 
-    public void Attack()
+    private IEnumerator Attacking()
     {
-        _attackTarget.TakeDamage(_damage);
+        while (enabled)
+        {
+            yield return _delay;
+
+            _attackTarget.TakeDamage(_damage);
+        }
     }
 }
