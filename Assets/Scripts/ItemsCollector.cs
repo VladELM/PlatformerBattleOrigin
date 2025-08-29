@@ -7,7 +7,7 @@ public class ItemsCollector : MonoBehaviour, ICollectable
     private string _objectLayer;
 
     public event Action<int> CoinCollected;
-    public event Action<int, IHealable> HeallerDetected;
+    public event Action<float, IHealable> HeallerDetected;
 
     private void Start()
     {

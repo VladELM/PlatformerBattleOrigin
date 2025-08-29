@@ -81,10 +81,10 @@ public class Enemy : MonoBehaviour
         _enemyAttackCollider.HostileTargetLeft += _enemyAnimation.TurnOffAttackAnimation;
         _enemyAttackCollider.ExitedTargetGot += _haunter.StartHaunting;
 
-        _enemyHealth.HealthBecameEmpty += _enemyAttackCollider.TurnOnCollision;
-        _enemyHealth.HealthBecameEmpty += _enemyAlertSign.TurnOffAlertSign;
-        _enemyHealth.HealthBecameEmpty += _enemyAnimation.TurnOnDeathAnimation;
-        _enemyHealth.HealthBecameEmpty += _enemyKiller.Kill;
+        _enemyHealth.BecameEmpty += _enemyAttackCollider.TurnOnCollision;
+        _enemyHealth.BecameEmpty += _enemyAlertSign.TurnOffAlertSign;
+        _enemyHealth.BecameEmpty += _enemyAnimation.TurnOnDeathAnimation;
+        _enemyHealth.BecameEmpty += _enemyKiller.Kill;
 
         _itemsCollector.HeallerDetected += _enemyHealth.Heal;
     }
@@ -118,10 +118,10 @@ public class Enemy : MonoBehaviour
         _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.TurnOffAttackAnimation;
         _enemyAttackCollider.ExitedTargetGot -= _haunter.StartHaunting;
 
-        _enemyHealth.HealthBecameEmpty -= _enemyAttackCollider.TurnOnCollision;
-        _enemyHealth.HealthBecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
-        _enemyHealth.HealthBecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
-        _enemyHealth.HealthBecameEmpty -= _enemyKiller.Kill;
+        _enemyHealth.BecameEmpty -= _enemyAttackCollider.TurnOnCollision;
+        _enemyHealth.BecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
+        _enemyHealth.BecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
+        _enemyHealth.BecameEmpty -= _enemyKiller.Kill;
 
         _itemsCollector.HeallerDetected -= _enemyHealth.Heal;
     }

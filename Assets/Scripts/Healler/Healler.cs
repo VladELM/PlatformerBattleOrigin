@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Healler : MonoBehaviour, IHealable, IEnterable
 {
-    [SerializeField] private int _healPoints;
+    [SerializeField] private float _healPoints;
 
-    public int HealPoints => _healPoints;
+    public float HealPoints => _healPoints;
 
     public event Action<Healler> HeallerCollected;
 

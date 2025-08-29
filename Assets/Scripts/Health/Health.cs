@@ -3,34 +3,61 @@ using UnityEngine;
 
 public abstract class Health : MonoBehaviour, IDamageable
 {
-    [SerializeField] protected int _healthValue;
+    [SerializeField] protected float _value;
 
-    public event Action HealthBecameEmpty;
+    //public event Action<float> MaxValueAssigned;
+    public event Action<float> ValueChanged;
+    public event Action BecameEmpty;
 
-    public int MaxHealthValue {get; private set;}
+    public float MaxValue {get; private set;}
 
     private void Awake()
     {
-        MaxHealthValue = _healthValue;
+        MaxValue = _value;
     }
 
-    public void Heal(int healPoints, IHealable healable)
+    public void Heal(float healPoints, IHealable healable)
     {
-        if ((healPoints + _healthValue) <= MaxHealthValue)
+        if (_value < MaxValue)
         {
-            _healthValue += healPoints;
+            float healthValue = _value + healPoints;
+
+            if (healthValue <= MaxValue)
+            {
+                ValueChanged?.Invoke(_value + healPoints);
+                _value += healPoints;
+            }
+            else if (healthValue > MaxValue)
+            {
+                ValueChanged?.Invoke(MaxValue);
+                _value = MaxValue;
+            }
+
             healable.DeactivateHealler();
         }
     }
 
-    public void TakeDamage(int incomingDamage)
+    public void TakeDamage(float incomingDamage)
     {
         if (incomingDamage > 0)
         {
-            if (_healthValue > 0)
-                _healthValue -= incomingDamage;
-            else if (_healthValue <= 0)
-                HealthBecameEmpty?.Invoke();
+            if (_value != 0)
+            {
+                if (_value >= incomingDamage)
+                {
+                    ValueChanged?.Invoke(_value - incomingDamage);
+                    _value -= incomingDamage;
+
+                    if (_value == 0)
+                        BecameEmpty?.Invoke();
+                }
+                else if (_value < incomingDamage)
+                {
+                    _value = 0;
+                    ValueChanged?.Invoke(_value);
+                    BecameEmpty?.Invoke();
+                }
+            }
         }
     }
 }
