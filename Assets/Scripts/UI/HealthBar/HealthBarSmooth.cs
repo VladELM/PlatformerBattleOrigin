@@ -16,21 +16,26 @@ public class HealthBarSmooth : HealthView
     private WaitForSeconds _changingDelay;
     private Coroutine _coroutine;
 
-
     private void Awake()
     {
         _image = GetComponent<Image>();
     }
 
-    protected override void OnMaxHealthValueAssigned(float value)
+    protected override void OnMaxHealthValueAssigned(float maxValue)
     {
-        _multiplier = value;
-        _image.fillAmount = value / _multiplier;
+        _multiplier = maxValue;
+        _image.fillAmount = maxValue / _multiplier;
+        _maxValue = _image.fillAmount;
     }
 
     protected override void OnHealthValueChanged(float value)
     {
         StartChangeHealth(value);
+    }
+
+    protected override void Restore()
+    {
+        _image.fillAmount = _maxValue;
     }
 
     private void StartChangeHealth(float targetHealth)

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Patroller : MonoBehaviour
 {
+    [SerializeField] private Transform _enemy;
     [SerializeField] private Transform _rayOrigin;
     [SerializeField] private LayerMask _detectingLayer;
     [SerializeField] private float _rayDistance;
@@ -26,13 +27,13 @@ public class Patroller : MonoBehaviour
         _targets = targets;
         _targetIndex = 0;
         _currentTarget = GetTarget();
-        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(_enemy.position.x,
                                                                     _currentTarget.position.x));
     }
 
     public void StartPatrolling()
     {
-        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+        PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(_enemy.position.x,
                                                                     _currentTarget.position.x));
         _coroutine = StartCoroutine(Patrolling());
     }
@@ -64,10 +65,10 @@ public class Patroller : MonoBehaviour
 
         if (hit.collider)
         {
-            if (hit.collider.TryGetComponent(out Player component))
+            if (hit.collider.TryGetComponent(out Player player))
             {
                 HauntTargetDetected?.Invoke();
-                HauntTargetGot?.Invoke(component.transform);
+                HauntTargetGot?.Invoke(player.transform);
                 isHostileTarget = true;
             }
         }
@@ -81,27 +82,27 @@ public class Patroller : MonoBehaviour
                                         GetEqualizedTargetY(),
                                     _currentTarget.position.z);
 
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
+        _enemy.position = Vector2.MoveTowards(_enemy.position, targetPosition, _speed * Time.deltaTime);
 
         if (IsDistanceZero())
         {
             _currentTarget = GetTarget();
-            PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+            PatrolTargetChanged?.Invoke(DirectionCalculator.GetDirection(_enemy.position.x,
                                                                     _currentTarget.position.x));
         }
     }
 
     private float GetEqualizedTargetY()
     {
-        float offsetY = Math.Abs(Math.Abs(_currentTarget.position.y) - Math.Abs(transform.position.y));
+        float offsetY = Math.Abs(Math.Abs(_currentTarget.position.y) - Math.Abs(_enemy.position.y));
 
         float equalizedTargetY = 0;
 
-        if (_currentTarget.position.y > transform.position.y)
+        if (_currentTarget.position.y > _enemy.position.y)
             equalizedTargetY = _currentTarget.position.y - offsetY;
-        else if (_currentTarget.position.y < transform.position.y)
+        else if (_currentTarget.position.y < _enemy.position.y)
             equalizedTargetY = _currentTarget.position.y + offsetY;
-        else if (_currentTarget.position.y == transform.position.y)
+        else if (_currentTarget.position.y == _enemy.position.y)
             equalizedTargetY = offsetY;
 
         return equalizedTargetY;
@@ -110,9 +111,9 @@ public class Patroller : MonoBehaviour
     private bool IsDistanceZero()
     {
         bool isZero = false;
-        float offset = Math.Abs(_currentTarget.position.x) - Math.Abs(transform.position.x);
+        float offset = Math.Abs(Math.Abs(_currentTarget.position.x) - Math.Abs(_enemy.position.x));
 
-        if (offset == 0)
+        if (offset <= 0)
             isZero = true;
 
         return isZero;

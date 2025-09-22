@@ -9,6 +9,7 @@ public class EnemyAttackCollider : MonoBehaviour
     public event Action<float> TargetPositionXGot;
     public event Action AttackTargetDetected;
     public event Action<Transform> ExitedTargetGot;
+    public event Action ExitedTargetLeft;
     public event Action HostileTargetLeft;
 
     private void OnEnable()
@@ -42,7 +43,11 @@ public class EnemyAttackCollider : MonoBehaviour
                 if (attackTrigger.TryGetComponent(out Player player))
                 {
                     HostileTargetLeft?.Invoke();
-                    ExitedTargetGot?.Invoke(attackTrigger.transform);
+
+                    if (player.gameObject.activeSelf)
+                        ExitedTargetGot?.Invoke(attackTrigger.transform);
+                    else
+                        ExitedTargetLeft?.Invoke();
                 }
             }
         }

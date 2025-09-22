@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAttacker : MonoBehaviour
 {
     [SerializeField] private int _damage;
+
     private IDamageable _attackTarget;
 
     public bool IsAttackTarget => _attackTarget != null;

@@ -24,7 +24,6 @@ public class EnemyAttacker : MonoBehaviour
     public void StopAttack()
     {
         StopCoroutine(_attackCoroutine);
-        _attackTarget = null;
     }
 
     private IEnumerator Attacking()

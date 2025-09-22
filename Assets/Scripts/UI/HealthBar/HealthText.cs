@@ -16,6 +16,7 @@ public class HealthText : HealthView
     protected override void OnMaxHealthValueAssigned(float value)
     {
         SetTextPattern(value);
+        _maxValue = value;
     }
 
     protected override void OnHealthValueChanged(float value)
@@ -32,5 +33,10 @@ public class HealthText : HealthView
     protected void SetText(float value)
     {
         _text.text = Convert.ToInt32(value) + _textPattern;
+    }
+
+    protected override void Restore()
+    {
+        SetText(_maxValue);
     }
 }

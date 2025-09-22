@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Haunter : MonoBehaviour
 {
+    [SerializeField] private Transform _enemy;
     [SerializeField] private float _speed;
     [SerializeField] private float _losingDistance;
 
@@ -42,7 +43,7 @@ public class Haunter : MonoBehaviour
         {
             yield return null;
 
-            HauntingTargetPositionChanged?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
+            HauntingTargetPositionChanged?.Invoke(DirectionCalculator.GetDirection(_enemy.position.x,
                                                                     _hauntTarget.position.x));
 
             if (IsLoseDistance())
@@ -59,8 +60,8 @@ public class Haunter : MonoBehaviour
 
     private bool IsLoseDistance()
     {
-        float offsetX = GetAbsoluteValue(_hauntTarget.position.x, transform.position.x);
-        float offsetY = GetAbsoluteValue(_hauntTarget.position.y, transform.position.y);
+        float offsetX = GetAbsoluteValue(_hauntTarget.position.x, _enemy.position.x);
+        float offsetY = GetAbsoluteValue(_hauntTarget.position.y, _enemy.position.y);
 
         int power = 2;
         float offsetSqrt = (float)Math.Pow(offsetX, power) + (float)Math.Pow(offsetY, power);
@@ -72,13 +73,13 @@ public class Haunter : MonoBehaviour
         else if (offsetSqrt >= losingDistancePow)
             isLosed = true;
 
-            return isLosed;
+        return isLosed;
     }
 
     private void Haunt()
     {
         Vector3 targetPosition = new Vector3(_hauntTarget.position.x, GetEqualizedTargetY(), _hauntTarget.position.z);
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
+        _enemy.position = Vector2.MoveTowards(_enemy.position, targetPosition, _speed * Time.deltaTime);
     }
 
     private void StopToHaunt()
@@ -89,14 +90,14 @@ public class Haunter : MonoBehaviour
 
     private float GetEqualizedTargetY()
     {
-        float deltaY = GetAbsoluteValue(_hauntTarget.position.y, transform.position.y);
+        float deltaY = GetAbsoluteValue(_hauntTarget.position.y, _enemy.position.y);
         float equalizedTargetY = 0;
 
-        if (_hauntTarget.position.y > transform.position.y)
+        if (_hauntTarget.position.y > _enemy.position.y)
             equalizedTargetY = _hauntTarget.position.y - deltaY;
-        else if (_hauntTarget.position.y < transform.position.y)
+        else if (_hauntTarget.position.y < _enemy.position.y)
             equalizedTargetY = _hauntTarget.position.y + deltaY;
-        else if (_hauntTarget.position.y == transform.position.y)
+        else if (_hauntTarget.position.y == _enemy.position.y)
             equalizedTargetY = deltaY;
 
         return equalizedTargetY;

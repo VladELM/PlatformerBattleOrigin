@@ -5,32 +5,28 @@ public abstract class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] protected float _value;
 
-    //public event Action<float> MaxValueAssigned;
+    protected float _maxValue;
+
+    public event Action<float> MaxValueAssigned;
     public event Action<float> ValueChanged;
     public event Action BecameEmpty;
-
-    public float MaxValue {get; private set;}
-
-    private void Awake()
-    {
-        MaxValue = _value;
-    }
+    public event Action Spawned;
 
     public void Heal(float healPoints, IHealable healable)
     {
-        if (_value < MaxValue)
+        if (_value < _maxValue)
         {
             float healthValue = _value + healPoints;
 
-            if (healthValue <= MaxValue)
+            if (healthValue <= _maxValue)
             {
                 ValueChanged?.Invoke(_value + healPoints);
                 _value += healPoints;
             }
-            else if (healthValue > MaxValue)
+            else if (healthValue > _maxValue)
             {
-                ValueChanged?.Invoke(MaxValue);
-                _value = MaxValue;
+                ValueChanged?.Invoke(_maxValue);
+                _value = _maxValue;
             }
 
             healable.DeactivateHealler();
@@ -59,5 +55,17 @@ public abstract class Health : MonoBehaviour, IDamageable
                 }
             }
         }
+    }
+
+    public void AssignMaxValue()
+    {
+        _maxValue = _value;
+        MaxValueAssigned?.Invoke(_maxValue);
+    }
+
+    public void Restore()
+    {
+        _value = _maxValue;
+        Spawned?.Invoke();
     }
 }

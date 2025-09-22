@@ -1,48 +1,47 @@
-using System.Collections;
 using UnityEngine;
 
-[RequireComponent (typeof(InputReader))]
-[RequireComponent (typeof(Flipper))]
-[RequireComponent (typeof(Mover))]
 [RequireComponent (typeof(Jumper))]
-[RequireComponent(typeof(PlayerAnimator))]
-[RequireComponent (typeof(PlayerHealth))]
-[RequireComponent(typeof(CoinsCounter))]
-[RequireComponent (typeof(PlayerAttackCollider))]
-[RequireComponent (typeof(PlayerAttacker))]
+[RequireComponent (typeof(Flipper))]
 public class Player : MonoBehaviour
 {
-    private InputReader _inputReader;
-    private Flipper _rotator;
-    private Mover _mover;
+    [SerializeField] private Flipper _rotator;
+    [SerializeField] private PlayerAnimator _playerAnimator;
+
     private Jumper _jumper;
-    private PlayerAnimator _playerAnimator;
+    private InputReader _inputReader;
+    private Mover _mover;
     private PlayerHealth _playerHealth;
     private CoinsCounter _coinsCount;
     private ItemsCollector _itemsCollector;
     private PlayerAttacker _playerAttacker;
     private PlayerAttackCollider _playerAttackCollider;
 
-    private void Start()
+    private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
-        _rotator = GetComponent<Flipper>();
-        _mover = GetComponent<Mover>();
         _jumper = GetComponent<Jumper>();
-        _playerAnimator = GetComponent<PlayerAnimator>();
+        _mover = GetComponent<Mover>();
         _playerHealth = GetComponent<PlayerHealth>();
         _coinsCount = GetComponent<CoinsCounter>();
         _itemsCollector = GetComponent<ItemsCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();
         _playerAttacker = GetComponent<PlayerAttacker>();
+    }
 
+    private void Start()
+    {
+        _playerHealth.AssignMaxValue();
+    }
+
+    private void OnEnable()
+    {
         _itemsCollector.HeallerDetected += _playerHealth.Heal;
         _itemsCollector.CoinCollected += _coinsCount.AddCoin;
         _playerAttackCollider.AttackTargetGot += _playerAttacker.AssignAttackTarget;
         _playerAttackCollider.AttackTargetLost += _playerAttacker.TakeAwayAttackTarget;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         _itemsCollector.HeallerDetected -= _playerHealth.Heal;
         _itemsCollector.CoinCollected -= _coinsCount.AddCoin;

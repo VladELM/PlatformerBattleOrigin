@@ -2,8 +2,6 @@ using static UnityEngine.Random;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
-using System.Runtime.CompilerServices;
 
 public class EnemiesSpawner : Spawner
 {
@@ -17,9 +15,6 @@ public class EnemiesSpawner : Spawner
 
     public int MaxPoolSize { get; private set; }
     public int ActiveEnemiesAmount { get; private set; }
-
-    //public event Action<int, int> AmountGet;
-    public event Action<EnemyHealth> Spawned;
 
     private void Awake()
     {
@@ -55,10 +50,6 @@ public class EnemiesSpawner : Spawner
                         enemyKiller.Killed += GiveBack;
                         enemy.Subscribe();
                         enemy.RunAfterInitialization();
-
-
-                        if (enemy.TryGetComponent(out EnemyHealth enemyHealth))
-                            Spawned?.Invoke(enemyHealth);
                     }
                 }
             }
@@ -84,9 +75,6 @@ public class EnemiesSpawner : Spawner
             enemy.gameObject.SetActive(true);
             enemy.Subscribe();
             enemy.Respawn();
-
-            if (enemy.TryGetComponent(out EnemyHealth enemyHealth))
-                Spawned?.Invoke(enemyHealth);
         }
     }
 

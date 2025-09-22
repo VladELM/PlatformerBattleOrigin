@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ItemsCollector))]
 public class ItemsEnterTrigger : MonoBehaviour
 {
     private ItemsCollector _itemsCollector;
@@ -12,7 +11,10 @@ public class ItemsEnterTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.TryGetComponent(out IEnterable enterable))
-            enterable.Take(_itemsCollector);
+        if (_itemsCollector != null)
+        {
+            if (collider.TryGetComponent(out IEnterable enterable))
+                enterable.Take(_itemsCollector);
+        }
     }
 }

@@ -1,9 +1,17 @@
 using UnityEngine;
 
+
+[RequireComponent (typeof(SpriteRenderer))]
 public class EnemyAlertSign : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Sprite _alertSignSprite;
+
+    private SpriteRenderer _spriteRenderer;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void TurnOnAlertSign()
     {

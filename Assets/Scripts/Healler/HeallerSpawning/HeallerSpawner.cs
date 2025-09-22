@@ -12,6 +12,8 @@ public class HeallerSpawner : MonoBehaviour
     [SerializeField] protected int _maxDelay;
     [SerializeField] private List<HeallerSpawnPoint> _heallerSpawnPoints;
 
+    [SerializeField] private Transform _transform;
+
     private Queue<Healler> _heallersPool;
 
     private void Awake()

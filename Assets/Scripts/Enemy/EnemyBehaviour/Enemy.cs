@@ -1,32 +1,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(RendererOperator))]
+
 [RequireComponent(typeof(Patroller))]
 [RequireComponent(typeof(Haunter))]
-[RequireComponent(typeof(EnemyAttacker))]
-[RequireComponent (typeof(EnemyAttackCollider))]
-[RequireComponent(typeof(AttackComponent))]
-[RequireComponent(typeof(EnemyAnimation))]
-[RequireComponent(typeof(Flipper))]
-[RequireComponent(typeof(EnemyHealth))]
-[RequireComponent(typeof(ItemsCollector))]
 [RequireComponent(typeof(EnemyKiller))]
+[RequireComponent(typeof(EnemyHealth))]
+[RequireComponent(typeof(EnemyAttacker))]
+[RequireComponent(typeof(ItemsCollector))]
+[RequireComponent(typeof(ItemsEnterTrigger))]
+[RequireComponent(typeof(EnemyAttackCollider))]
+[RequireComponent(typeof(AttackComponent))]
+
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Patroller _patroller;
-    [SerializeField] private Haunter _haunter;
-    [SerializeField] private EnemyAttacker _enemyAttacker;
     [SerializeField] private EnemyAnimation _enemyAnimation;
     [SerializeField] private EnemyAlertSign _enemyAlertSign;
-    [SerializeField] private EnemyHealth _enemyHealth;
-    [SerializeField] private ItemsCollector _itemsCollector;
-    [SerializeField] private EnemyKiller _enemyKiller;
+    [SerializeField] private RendererOperator _rendererOperator;
+    [SerializeField] private Flipper _enemyRotator;
+    [SerializeField] private Flipper _rayOriginRotator;
+    [SerializeField] private HealthBar _healthBar;
 
-    private RendererOperator _rendererOperator;
-    private Flipper _enemyRotator;
+    private Patroller _patroller;
+    private Haunter _haunter;
+    private EnemyKiller _enemyKiller;
+    private EnemyHealth _enemyHealth;
+    private EnemyAttacker _enemyAttacker;
+    private ItemsCollector _itemsCollector;
     private EnemyAttackCollider _enemyAttackCollider;
+
     private Vector3 _startPosition;
+
+    private void Awake()
+    {
+        _patroller = GetComponent<Patroller>();
+        _haunter = GetComponent<Haunter>();
+        _enemyKiller = GetComponent<EnemyKiller>();
+        _enemyHealth = GetComponent<EnemyHealth>();
+        _enemyAttacker = GetComponent<EnemyAttacker>();
+        _itemsCollector = GetComponent<ItemsCollector>();
+        _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
+
+    }
 
     private void OnDestroy()
     {
@@ -37,22 +52,11 @@ public class Enemy : MonoBehaviour
     {
         transform.position = position;
         _startPosition = position;
-
-        _rendererOperator = GetComponent<RendererOperator>();
-        _patroller = GetComponent<Patroller>();
-        _haunter = GetComponent<Haunter>();
-        _enemyAttacker = GetComponent<EnemyAttacker>();
-        _enemyAnimation = GetComponent<EnemyAnimation>();
-        _enemyHealth = GetComponent<EnemyHealth>();
-        _itemsCollector = GetComponent<ItemsCollector>();
-        _enemyKiller = GetComponent<EnemyKiller>();
-        _enemyRotator = GetComponent<Flipper>();
-        _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
-
         _enemyKiller.Initialize(_enemyAnimation.GetAnimationsLength());
         _haunter.Initialize(_patroller.RayDistance);
         _patroller.Initialize(targets);
         _rendererOperator.FillRenderersList();
+        _enemyHealth.AssignMaxValue();
     }
 
     public void RunAfterInitialization()
@@ -63,16 +67,19 @@ public class Enemy : MonoBehaviour
     public void Subscribe()
     {
         _patroller.PatrolTargetChanged += _enemyRotator.Flip;
+        _patroller.PatrolTargetChanged += _rayOriginRotator.Flip;
         _patroller.HauntTargetDetected += _enemyAlertSign.TurnOnAlertSign;
         _patroller.HauntTargetGot += _haunter.StartHaunting;
 
         _haunter.HauntingTargetPositionChanged += _enemyRotator.Flip;
+        _haunter.HauntingTargetPositionChanged += _rayOriginRotator.Flip;
         _haunter.HauntingTargetLost += _enemyAlertSign.TurnOffAlertSign;
         _haunter.HauntingTargetLost += _patroller.StartPatrolling;
 
         _enemyAttackCollider.AttackTargetDetected += _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected += _haunter.StopHaunting;
         _enemyAttackCollider.TargetPositionXGot += _enemyRotator.Flip;
+        _enemyAttackCollider.TargetPositionXGot += _rayOriginRotator.Flip;
         _enemyAttackCollider.AttackTargetDetected += _enemyAlertSign.TurnOnAlertSign;
         _enemyAttackCollider.AttackTargetDetected += _enemyAnimation.TurnOnAttackAnimation;
         _enemyAttackCollider.AttackTargetGot += _enemyAttacker.StartAttack;
@@ -80,18 +87,30 @@ public class Enemy : MonoBehaviour
         _enemyAttackCollider.HostileTargetLeft += _enemyAttacker.StopAttack;
         _enemyAttackCollider.HostileTargetLeft += _enemyAnimation.TurnOffAttackAnimation;
         _enemyAttackCollider.ExitedTargetGot += _haunter.StartHaunting;
+        _enemyAttackCollider.ExitedTargetLeft += _patroller.StartPatrolling;
+        _enemyAttackCollider.ExitedTargetLeft += _enemyAlertSign.TurnOffAlertSign;
 
         _enemyHealth.BecameEmpty += _enemyAttackCollider.TurnOnCollision;
         _enemyHealth.BecameEmpty += _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.BecameEmpty += _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.BecameEmpty += _enemyKiller.Kill;
+        _enemyHealth.BecameEmpty += _healthBar.SwitchOffHealthBar;
+        _enemyHealth.BecameEmpty += SwitchOffAttackCollider;
+        _enemyHealth.BecameEmpty += _enemyAttacker.StopAttack;
 
         _itemsCollector.HeallerDetected += _enemyHealth.Heal;
     }
 
+    private void SwitchOffAttackCollider()
+    {
+        _enemyAttackCollider.enabled = false;
+    }
+
     public void Respawn()
     {
+        _enemyAttackCollider.enabled = true;
         transform.position = _startPosition;
+        _healthBar.SwitchOnHealthBar();
         _enemyHealth.Restore();
         _rendererOperator.TurnOnRenderer();
         _patroller.StartPatrolling();
@@ -100,16 +119,19 @@ public class Enemy : MonoBehaviour
     public void Unsubscribe()
     {
         _patroller.PatrolTargetChanged -= _enemyRotator.Flip;
+        _patroller.PatrolTargetChanged -= _rayOriginRotator.Flip;
         _patroller.HauntTargetDetected -= _enemyAlertSign.TurnOnAlertSign;
         _patroller.HauntTargetGot -= _haunter.StartHaunting;
 
         _haunter.HauntingTargetPositionChanged -= _enemyRotator.Flip;
+        _haunter.HauntingTargetPositionChanged -= _rayOriginRotator.Flip;
         _haunter.HauntingTargetLost -= _enemyAlertSign.TurnOffAlertSign;
         _haunter.HauntingTargetLost -= _patroller.StartPatrolling;
 
         _enemyAttackCollider.AttackTargetDetected -= _patroller.StopPatrolling;
         _enemyAttackCollider.AttackTargetDetected -= _haunter.StopHaunting;
         _enemyAttackCollider.TargetPositionXGot -= _enemyRotator.Flip;
+        _enemyAttackCollider.TargetPositionXGot -= _rayOriginRotator.Flip;
         _enemyAttackCollider.AttackTargetDetected -= _enemyAlertSign.TurnOnAlertSign;
         _enemyAttackCollider.AttackTargetDetected -= _enemyAnimation.TurnOnAttackAnimation;
         _enemyAttackCollider.AttackTargetGot -= _enemyAttacker.StartAttack;
@@ -117,11 +139,16 @@ public class Enemy : MonoBehaviour
         _enemyAttackCollider.HostileTargetLeft -= _enemyAttacker.StopAttack;
         _enemyAttackCollider.HostileTargetLeft -= _enemyAnimation.TurnOffAttackAnimation;
         _enemyAttackCollider.ExitedTargetGot -= _haunter.StartHaunting;
+        _enemyAttackCollider.ExitedTargetLeft -= _patroller.StartPatrolling;
+        _enemyAttackCollider.ExitedTargetLeft -= _enemyAlertSign.TurnOffAlertSign;
 
         _enemyHealth.BecameEmpty -= _enemyAttackCollider.TurnOnCollision;
         _enemyHealth.BecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.BecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.BecameEmpty -= _enemyKiller.Kill;
+        _enemyHealth.BecameEmpty -= _healthBar.SwitchOffHealthBar;
+        _enemyHealth.BecameEmpty -= SwitchOffAttackCollider;
+        _enemyHealth.BecameEmpty -= _enemyAttacker.StopAttack;
 
         _itemsCollector.HeallerDetected -= _enemyHealth.Heal;
     }
