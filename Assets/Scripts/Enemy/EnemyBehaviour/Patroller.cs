@@ -46,14 +46,16 @@ public class Patroller : MonoBehaviour
 
     private IEnumerator Patrolling()
     {
-        while (enabled)
+        bool isPatrolling = true;
+
+        while (isPatrolling)
         {
             yield return null;
 
             if (IsHostileTargetDetected() == false)
                 Patrol();
             else
-                break;
+                isPatrolling = false;
         }
     }
 

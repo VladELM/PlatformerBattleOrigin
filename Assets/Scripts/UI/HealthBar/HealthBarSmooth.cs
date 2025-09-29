@@ -5,15 +5,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class HealthBarSmooth : HealthView
 {
-    [SerializeField] private float _changingTime;
     [SerializeField] private float _changingValue;
     [SerializeField] private float _multiplier;
 
     private Image _image;
     private bool _isChanging;
-    private float _currentHealth;
-    private float _targetHealth;
-    private WaitForSeconds _changingDelay;
     private Coroutine _coroutine;
 
     private void Awake()
@@ -46,24 +42,17 @@ public class HealthBarSmooth : HealthView
             StopCoroutine(_coroutine);
         }
 
-        _targetHealth = targetHealth;
         _isChanging = true;
-        _coroutine = StartCoroutine(HealthChanging(_changingDelay));
+        _coroutine = StartCoroutine(ChangingHealth(targetHealth));
     }
 
-    private IEnumerator HealthChanging(WaitForSeconds delay)
+    private IEnumerator ChangingHealth(float targetHealth)
     {
         while (enabled)
         {
-            yield return delay;
+            yield return null;
 
-            if (_targetHealth == 0)
-                _image.fillAmount = 0;
-            else if (_targetHealth > 0)
-                _image.fillAmount = Mathf.MoveTowards(_image.fillAmount * _multiplier, _targetHealth, _changingValue * Time.deltaTime) / _multiplier;
-
-            if (_currentHealth == _targetHealth)
-                break;
+            _image.fillAmount = Mathf.MoveTowards(_image.fillAmount * _multiplier, targetHealth, _changingValue * Time.deltaTime) / _multiplier;
         }
     }
 }

@@ -39,7 +39,9 @@ public class Haunter : MonoBehaviour
 
     private IEnumerator Haunting()
     {
-        while (enabled)
+        bool isHaunting = true;
+
+        while (isHaunting)
         {
             yield return null;
 
@@ -49,7 +51,7 @@ public class Haunter : MonoBehaviour
             if (IsLoseDistance())
             {
                 StopToHaunt();
-                break;
+                isHaunting = false;
             }
             else
             {

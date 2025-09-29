@@ -10,7 +10,7 @@ public class PlayerAttackCollider : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
         {
-            if (attackTrigger.TryGetComponent(out EnemyHealth enemyHealth))
+            if (attackTrigger.TryGetComponent(out Health enemyHealth))
                 AttackTargetGot?.Invoke(enemyHealth);
         }
     }

@@ -3,20 +3,12 @@ using UnityEngine;
 
 public class ItemsCollector : MonoBehaviour, ICollectable
 {
-    private string _coinCollectorLayer = "Player";
-    private string _objectLayer;
-
     public event Action<int> CoinCollected;
     public event Action<float, IHealable> HeallerDetected;
 
-    private void Start()
-    {
-        _objectLayer = gameObject.tag;
-    }
-
     public void Collect(Coin coin)
     {
-        if (_objectLayer == _coinCollectorLayer)
+        if (this.gameObject.TryGetComponent(out Player player))
         {
             coin.Disactivate();
 

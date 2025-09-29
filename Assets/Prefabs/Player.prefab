@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 1170184070387344788}
   - component: {fileID: 5619640672105527678}
   - component: {fileID: 3479480315435251185}
-  - component: {fileID: 5109024528662991638}
   - component: {fileID: 1100359736582630333}
+  - component: {fileID: -2156954323717555709}
   - component: {fileID: 5261507331193054367}
   - component: {fileID: 2853839678256843996}
   - component: {fileID: 4614769782452774120}
@@ -148,20 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc5d3268ebdfd34c85c714ac2e7c497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
---- !u!114 &5109024528662991638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3790584133883171568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6405eb8ebd13caf44bbd33747b2d65b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _value: 300
+  _speed: 0.05
 --- !u!114 &1100359736582630333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +161,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e334bd6c3d70140bb0ef9d5f1101dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2156954323717555709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3790584133883171568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b1635d31ae2d8449f8e5bfa3352f5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _value: 500
 --- !u!114 &5261507331193054367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1333755636da514caf68bc775c6a967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 103
+  _damage: 67
 --- !u!114 &3721960078846720188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,11 +588,11 @@ PrefabInstance:
     - target: {fileID: 8866594927853048113, guid: 85d2318281dd63344acf58f3c7cccc7a, type: 3}
       propertyPath: _health
       value: 
-      objectReference: {fileID: 5109024528662991638}
+      objectReference: {fileID: -2156954323717555709}
     - target: {fileID: 9157243504426585949, guid: 85d2318281dd63344acf58f3c7cccc7a, type: 3}
       propertyPath: _health
       value: 
-      objectReference: {fileID: 5109024528662991638}
+      objectReference: {fileID: -2156954323717555709}
     - target: {fileID: 9207436459923009392, guid: 85d2318281dd63344acf58f3c7cccc7a, type: 3}
       propertyPath: m_Layer
       value: 7

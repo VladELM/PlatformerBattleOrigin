@@ -23,7 +23,7 @@ public class EnemyAttackCollider : MonoBehaviour
         {
             if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
             {
-                if (attackTrigger.TryGetComponent(out PlayerHealth playerHealth))
+                if (attackTrigger.TryGetComponent(out Health playerHealth))
                 {
                     AttackTargetGot?.Invoke(playerHealth);
                     TargetPositionXGot?.Invoke(DirectionCalculator.GetDirection(transform.position.x,

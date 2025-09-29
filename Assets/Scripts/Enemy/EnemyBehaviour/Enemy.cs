@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Patroller))]
 [RequireComponent(typeof(Haunter))]
 [RequireComponent(typeof(EnemyKiller))]
-[RequireComponent(typeof(EnemyHealth))]
+[RequireComponent(typeof(Health))]
 [RequireComponent(typeof(EnemyAttacker))]
 [RequireComponent(typeof(ItemsCollector))]
 [RequireComponent(typeof(ItemsEnterTrigger))]
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     private Patroller _patroller;
     private Haunter _haunter;
     private EnemyKiller _enemyKiller;
-    private EnemyHealth _enemyHealth;
+    private Health _enemyHealth;
     private EnemyAttacker _enemyAttacker;
     private ItemsCollector _itemsCollector;
     private EnemyAttackCollider _enemyAttackCollider;
@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
         _patroller = GetComponent<Patroller>();
         _haunter = GetComponent<Haunter>();
         _enemyKiller = GetComponent<EnemyKiller>();
-        _enemyHealth = GetComponent<EnemyHealth>();
+        _enemyHealth = GetComponent<Health>();
         _enemyAttacker = GetComponent<EnemyAttacker>();
         _itemsCollector = GetComponent<ItemsCollector>();
         _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
@@ -101,11 +101,6 @@ public class Enemy : MonoBehaviour
         _itemsCollector.HeallerDetected += _enemyHealth.Heal;
     }
 
-    private void SwitchOffAttackCollider()
-    {
-        _enemyAttackCollider.enabled = false;
-    }
-
     public void Respawn()
     {
         _enemyAttackCollider.enabled = true;
@@ -151,5 +146,10 @@ public class Enemy : MonoBehaviour
         _enemyHealth.BecameEmpty -= _enemyAttacker.StopAttack;
 
         _itemsCollector.HeallerDetected -= _enemyHealth.Heal;
+    }
+
+    private void SwitchOffAttackCollider()
+    {
+        _enemyAttackCollider.enabled = false;
     }
 }

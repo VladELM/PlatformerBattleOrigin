@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public abstract class Health : MonoBehaviour, IDamageable
+public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] protected float _value;
 
-    protected float _maxValue;
+    private float _maxValue;
 
     public event Action<float> MaxValueAssigned;
     public event Action<float> ValueChanged;

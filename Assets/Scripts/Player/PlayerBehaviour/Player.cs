@@ -2,6 +2,8 @@ using UnityEngine;
 
 [RequireComponent (typeof(Jumper))]
 [RequireComponent (typeof(Flipper))]
+[RequireComponent(typeof(ItemsCollector))]
+
 public class Player : MonoBehaviour
 {
     [SerializeField] private Flipper _rotator;
@@ -10,22 +12,26 @@ public class Player : MonoBehaviour
     private Jumper _jumper;
     private InputReader _inputReader;
     private Mover _mover;
-    private PlayerHealth _playerHealth;
+    private Health _playerHealth;
     private CoinsCounter _coinsCount;
     private ItemsCollector _itemsCollector;
     private PlayerAttacker _playerAttacker;
     private PlayerAttackCollider _playerAttackCollider;
+
+    public Health PlayerHealth { get; private set; }
 
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
         _jumper = GetComponent<Jumper>();
         _mover = GetComponent<Mover>();
-        _playerHealth = GetComponent<PlayerHealth>();
+        _playerHealth = GetComponent<Health>();
         _coinsCount = GetComponent<CoinsCounter>();
         _itemsCollector = GetComponent<ItemsCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();
         _playerAttacker = GetComponent<PlayerAttacker>();
+
+        PlayerHealth = _playerHealth;
     }
 
     private void Start()

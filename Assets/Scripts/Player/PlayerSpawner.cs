@@ -18,10 +18,10 @@ public class PlayerSpawner : MonoBehaviour
         Player player = Instantiate(_playerPrefab, transform.position, Quaternion.identity);
         _cameraMover.AssignTarget(player.transform);
 
-        if (player.TryGetComponent(out PlayerHealth playerHealth))
+        if (player.PlayerHealth)
         {
-            playerHealth.BecameEmpty += Disable;
-            playerHealth.BecameEmpty += _finishText.Show;
+            player.PlayerHealth.BecameEmpty += Disable;
+            player.PlayerHealth.BecameEmpty += _finishText.Show;
         }
 
         _player = player;
@@ -30,5 +30,8 @@ public class PlayerSpawner : MonoBehaviour
     private void Disable()
     {
         _player.gameObject.SetActive(false);
+
+        _player.PlayerHealth.BecameEmpty -= Disable;
+        _player.PlayerHealth.BecameEmpty -= _finishText.Show;
     }
 }

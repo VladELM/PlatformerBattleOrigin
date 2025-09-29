@@ -3,13 +3,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemiesSpawner : Spawner
+public class EnemiesSpawner : MonoBehaviour
 {
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private int _maxPoolSize;
     [SerializeField] private int _activeEnemiesAmount;
     [SerializeField] protected int _minDelay;
     [SerializeField] protected int _maxDelay;
+    [SerializeField] protected List<Transform> SpawnPoints;
 
     private Queue<Enemy> _enemiesPool;
 
@@ -27,16 +28,16 @@ public class EnemiesSpawner : Spawner
         SpawnOnStart();
     }
 
-    protected override void SpawnOnStart()
+    private void SpawnOnStart()
     {
         _enemiesPool = new Queue<Enemy>();
 
-        for (int i = 0; i < _spawnPoints.Count; i++)
+        for (int i = 0; i < SpawnPoints.Count; i++)
         {
-            if (_spawnPoints[i].TryGetComponent(out EnemySpawnPoint enemySpawnPoint))
+            if (SpawnPoints[i].TryGetComponent(out EnemySpawnPoint enemySpawnPoint))
             {
                 Enemy enemy = Instantiate(_enemyPrefab);
-                enemy.Initialize(_spawnPoints[i].transform.position, enemySpawnPoint.GetPatrolPoints());
+                enemy.Initialize(SpawnPoints[i].transform.position, enemySpawnPoint.GetPatrolPoints());
 
                 if (_enemiesPool.Count < _maxPoolSize)
                 {
@@ -55,7 +56,7 @@ public class EnemiesSpawner : Spawner
             }
         }
 
-        _spawnPoints.Clear();
+        SpawnPoints.Clear();
     }
 
     private IEnumerator Spawning()
@@ -90,4 +91,16 @@ public class EnemiesSpawner : Spawner
             StartCoroutine(Spawning());
         }
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("FillSpanwPointsList")]
+    private void FillSpawnPointsList()
+    {
+        int childAmount = transform.childCount;
+
+        for (int i = 0; i < childAmount; i++)
+            SpawnPoints.Add(transform.GetChild(i));
+    }
+
+#endif
 }
