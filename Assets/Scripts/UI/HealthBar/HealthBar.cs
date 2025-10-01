@@ -15,15 +15,9 @@ public class HealthBar : MonoBehaviour
             _healthBarElements.Add(transform.GetChild(i));
     }
 
-    public void SwitchOnHealthBar()
+    public void SetState(bool value)
     {
         for (int i = 0; i < _healthBarElements.Count; i++)
-            _healthBarElements[i].gameObject.SetActive(true);
-    }
-
-    public void SwitchOffHealthBar()
-    {
-        for (int i = 0; i < _healthBarElements.Count; i++)
-            _healthBarElements[i].gameObject.SetActive(false);
+            _healthBarElements[i].gameObject.SetActive(value);
     }
 }

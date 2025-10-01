@@ -94,7 +94,7 @@ public class Enemy : MonoBehaviour
         _enemyHealth.BecameEmpty += _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.BecameEmpty += _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.BecameEmpty += _enemyKiller.Kill;
-        _enemyHealth.BecameEmpty += _healthBar.SwitchOffHealthBar;
+        _enemyHealth.BecameEmpty += SwicthHelthBarState;
         _enemyHealth.BecameEmpty += SwitchOffAttackCollider;
         _enemyHealth.BecameEmpty += _enemyAttacker.StopAttack;
 
@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
     {
         _enemyAttackCollider.enabled = true;
         transform.position = _startPosition;
-        _healthBar.SwitchOnHealthBar();
+        _healthBar.SetState(true);
         _enemyHealth.Restore();
         _rendererOperator.TurnOnRenderer();
         _patroller.StartPatrolling();
@@ -141,11 +141,16 @@ public class Enemy : MonoBehaviour
         _enemyHealth.BecameEmpty -= _enemyAlertSign.TurnOffAlertSign;
         _enemyHealth.BecameEmpty -= _enemyAnimation.TurnOnDeathAnimation;
         _enemyHealth.BecameEmpty -= _enemyKiller.Kill;
-        _enemyHealth.BecameEmpty -= _healthBar.SwitchOffHealthBar;
+        _enemyHealth.BecameEmpty -= SwicthHelthBarState;
         _enemyHealth.BecameEmpty -= SwitchOffAttackCollider;
         _enemyHealth.BecameEmpty -= _enemyAttacker.StopAttack;
 
         _itemsCollector.HeallerDetected -= _enemyHealth.Heal;
+    }
+
+    private void SwicthHelthBarState()
+    {
+        _healthBar.SetState(false);
     }
 
     private void SwitchOffAttackCollider()
