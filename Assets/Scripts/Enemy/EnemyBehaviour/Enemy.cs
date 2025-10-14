@@ -28,8 +28,9 @@ public class Enemy : MonoBehaviour
     private EnemyAttacker _enemyAttacker;
     private ItemsCollector _itemsCollector;
     private EnemyAttackCollider _enemyAttackCollider;
-
     private Vector3 _startPosition;
+
+    public Health EnemyHealth { get; private set; }
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
         _itemsCollector = GetComponent<ItemsCollector>();
         _enemyAttackCollider = GetComponent<EnemyAttackCollider>();
 
+        EnemyHealth = _enemyHealth;
     }
 
     private void OnDestroy()

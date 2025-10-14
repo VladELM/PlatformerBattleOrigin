@@ -6,4 +6,5 @@ public class Constants
     public const KeyCode ButtonD = KeyCode.D;
     public const KeyCode ButtonSpace = KeyCode.Space;
     public const KeyCode ButtonRightShift = KeyCode.RightShift;
+    public const KeyCode ButtonLeftControl = KeyCode.LeftControl;
 }

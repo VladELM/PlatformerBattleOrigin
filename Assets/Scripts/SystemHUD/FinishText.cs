@@ -7,7 +7,6 @@ public class FinishText : MonoBehaviour
 
     public void Show()
     {
-        _textTransform.position = Camera.main.WorldToScreenPoint(_target.position);
         _textTransform.gameObject.SetActive(true);
     }
 }

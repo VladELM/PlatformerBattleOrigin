@@ -11,6 +11,7 @@ public class InputReader : MonoBehaviour
     public bool IsIdleRight { get; private set; }
     public bool IsJump { get; private set; }
     public bool IsAttack { get; private set; }
+    public bool IsVampirism { get; private set; }
 
     private void Update()
     {
@@ -24,5 +25,6 @@ public class InputReader : MonoBehaviour
 
         IsJump = Input.GetKey(Constants.ButtonSpace);
         IsAttack = Input.GetKeyDown(Constants.ButtonRightShift);
+        IsVampirism = Input.GetKeyDown(Constants.ButtonLeftControl);
     }
 }

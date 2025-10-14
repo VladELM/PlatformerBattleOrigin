@@ -7,10 +7,19 @@ public class Health : MonoBehaviour, IDamageable
 
     private float _maxValue;
 
+    public bool IsHealthNotFull { get; private set; }
+    public bool IsHealthAboveZero { get; private set; }
+
     public event Action<float> MaxValueAssigned;
     public event Action<float> ValueChanged;
     public event Action BecameEmpty;
     public event Action Spawned;
+
+    private void Start()
+    {
+        IsHealthNotFull = false;
+        IsHealthAboveZero = true;
+    }
 
     public void Heal(float healPoints, IHealable healable)
     {
@@ -31,6 +40,31 @@ public class Health : MonoBehaviour, IDamageable
 
             healable.DeactivateHealler();
         }
+
+        IsHealthNotFull = _value < _maxValue && _value > 0;
+        IsHealthAboveZero = _value > 0;
+    }
+
+    public void Heal(float healPoints)
+    {
+        if (_value < _maxValue)
+        {
+            float healthValue = _value + healPoints;
+
+            if (healthValue <= _maxValue)
+            {
+                ValueChanged?.Invoke(_value + healPoints);
+                _value += healPoints;
+            }
+            else if (healthValue > _maxValue)
+            {
+                ValueChanged?.Invoke(_maxValue);
+                _value = _maxValue;
+            }
+        }
+
+        IsHealthNotFull = _value < _maxValue && _value > 0;
+        IsHealthAboveZero = _value > 0;
     }
 
     public void TakeDamage(float incomingDamage)
@@ -55,6 +89,9 @@ public class Health : MonoBehaviour, IDamageable
                 }
             }
         }
+
+        IsHealthNotFull = _value < _maxValue && _value > 0;
+        IsHealthAboveZero = _value > 0;
     }
 
     public void AssignMaxValue()
