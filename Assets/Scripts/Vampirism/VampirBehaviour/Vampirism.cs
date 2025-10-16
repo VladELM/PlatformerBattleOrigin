@@ -22,24 +22,26 @@ public class Vampirism : MonoBehaviour
     private void OnEnable()
     {
         _counter.VampirismStarted += _area.SwitchArea;
+        _counter.VampirismStarted += _pumper.StartPumping;
         _counter.VampirismFinished += _area.SwitchArea;
+        _counter.VampirismFinished += _pumper.StopPumping;
 
-        _trigger.PampingTargetGot += PumpHealth;
+        _trigger.PampingTargetGot += _pumper.AddToList;
+        _trigger.PampingTargetLost += _pumper.RemoveFromList;
+
         _pumper.HealthPumped += _health.Heal;
     }
 
     private void OnDisable()
     {
         _counter.VampirismStarted -= _area.SwitchArea;
+        _counter.VampirismStarted -= _pumper.StartPumping;
         _counter.VampirismFinished -= _area.SwitchArea;
+        _counter.VampirismFinished -= _pumper.StopPumping;
 
-        _trigger.PampingTargetGot -= PumpHealth;
+        _trigger.PampingTargetGot -= _pumper.AddToList;
+        _trigger.PampingTargetLost -= _pumper.RemoveFromList;
+
         _pumper.HealthPumped -= _health.Heal;
-    }
-
-    private void PumpHealth(bool isEnemyHealthAboveZero, IDamageable pumpTarget)
-    {
-        if (isEnemyHealthAboveZero && _health.IsHealthNotFull)
-            _pumper.Pump(pumpTarget);
     }
 }

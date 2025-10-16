@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0f3fb56c7aa244c889c93bffc11cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _counter: {fileID: 354526569845480801}
+  _health: {fileID: -2156954323717555709}
   _pumpValue: 0.1
 --- !u!114 &7591472775307150432
 MonoBehaviour:
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _borderImage: {fileID: 3363163084077383204}
   _vampirismTrigger: {fileID: 516383894066108216}
+  _collider: {fileID: 6896163447537011286}
 --- !u!1 &3790584133883171568
 GameObject:
   m_ObjectHideFlags: 0

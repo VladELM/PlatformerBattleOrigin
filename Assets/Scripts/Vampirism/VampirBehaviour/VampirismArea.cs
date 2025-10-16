@@ -4,10 +4,11 @@ public class VampirismArea : MonoBehaviour
 {
     [SerializeField] private VampirBorderImage _borderImage;
     [SerializeField] private VampirismTrigger _vampirismTrigger;
+    [SerializeField] private Collider2D _collider;
 
     private bool _isVampirism;
 
-    private void Start()
+    private void Awake()
     {
         _isVampirism = false;
         SwitchCollider(_isVampirism);
@@ -33,8 +34,8 @@ public class VampirismArea : MonoBehaviour
     private void SwitchCollider(bool isActive)
     {
         if (isActive)
-            _vampirismTrigger.gameObject.SetActive(true);
+            _collider.enabled = true;
         else
-            _vampirismTrigger.gameObject.SetActive(false);
+            _collider.enabled = false;
     }
 }
