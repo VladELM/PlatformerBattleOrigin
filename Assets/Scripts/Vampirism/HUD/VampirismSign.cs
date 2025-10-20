@@ -4,7 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class VampirismSign : MonoBehaviour
 {
-    [SerializeField] private VampirismCounter _vampirismCounter;
+    [SerializeField] private Vampirism _vampirism;
 
     [SerializeField] private Sprite _chargedVampirism;
     [SerializeField] private Sprite _unchargedVampirism;
@@ -18,8 +18,8 @@ public class VampirismSign : MonoBehaviour
 
     private void OnEnable()
     {
-        _vampirismCounter.ChargingFinished += SetChargedSprite;
-        _vampirismCounter.VampirismFinished += SetUnchargedSprite;
+        _vampirism.ChargingFinished += SetChargedSprite;
+        _vampirism.VampirismFinished += SetUnchargedSprite;
     }
 
     void Start()
@@ -29,8 +29,8 @@ public class VampirismSign : MonoBehaviour
 
     private void OnDisable()
     {
-        _vampirismCounter.ChargingFinished -= SetChargedSprite;
-        _vampirismCounter.VampirismFinished -= SetUnchargedSprite;
+        _vampirism.ChargingFinished -= SetChargedSprite;
+        _vampirism.VampirismFinished -= SetUnchargedSprite;
     }
 
     private void SetChargedSprite()

@@ -1,47 +1,119 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(VampirismCounter))]
-[RequireComponent(typeof(VampirismArea))]
-[RequireComponent(typeof(VampirismPumper))]
 public class Vampirism : MonoBehaviour
 {
-    [SerializeField] private VampirismTrigger _trigger;
+    [SerializeField] private InputReader _inputReader;
     [SerializeField] private Health _health;
-    
-    private VampirismCounter _counter;
-    private VampirismArea _area;
-    private VampirismPumper _pumper;
+    [SerializeField] private float _actionTime;
+    [SerializeField] private float _chargeTime;
+    [SerializeField] private float _pumpValue;
 
-    private void Awake()
+    private WaitForSeconds _delay = new WaitForSeconds(1);
+    private bool _isCharged;
+    private bool _IsCoroutineWorking;
+    private IDamageable _target;
+
+    public event Action<float> TimeChanged;
+    public event Action VampirismStarted;
+    public event Action VampirismFinished;
+    public event Action ChargingFinished;
+    public event Action<float> HealthPumped;
+
+    private void Start()
     {
-        _counter = GetComponent<VampirismCounter>();
-        _area = GetComponent<VampirismArea>();
-        _pumper = GetComponent<VampirismPumper>();
+        _isCharged = true;
+        TimeChanged?.Invoke(_actionTime);
+        _IsCoroutineWorking = false;
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        _counter.VampirismStarted += _area.SwitchArea;
-        _counter.VampirismStarted += _pumper.StartPumping;
-        _counter.VampirismFinished += _area.SwitchArea;
-        _counter.VampirismFinished += _pumper.StopPumping;
+        if (_isCharged && _IsCoroutineWorking == false)
+        {
+            if (_inputReader.IsVampirism)
+            {
+                _IsCoroutineWorking = true;
+                StartCoroutine(Vampiring());
+            }
+        }
+        else if (_isCharged == false && _IsCoroutineWorking)
+        {
+            StartCoroutine(Charging());
+        }
 
-        _trigger.PampingTargetGot += _pumper.AddToList;
-        _trigger.PampingTargetLost += _pumper.RemoveFromList;
-
-        _pumper.HealthPumped += _health.Heal;
+        if (_target != null)
+            Debug.Log("!!!");
     }
 
-    private void OnDisable()
+    public void AssigneCurrentTarget(IDamageable target)
     {
-        _counter.VampirismStarted -= _area.SwitchArea;
-        _counter.VampirismStarted -= _pumper.StartPumping;
-        _counter.VampirismFinished -= _area.SwitchArea;
-        _counter.VampirismFinished -= _pumper.StopPumping;
+        _target = target;
+    }
 
-        _trigger.PampingTargetGot -= _pumper.AddToList;
-        _trigger.PampingTargetLost -= _pumper.RemoveFromList;
+    private IEnumerator Vampiring()
+    {
+        bool isTimeOn = true;
+        float remainingTime = _actionTime;
+        VampirismStarted?.Invoke();
 
-        _pumper.HealthPumped -= _health.Heal;
+        while (isTimeOn)
+        {
+            yield return _delay;
+
+            if (_target != null)
+                Pump();
+
+            remainingTime -= 1f;
+
+            if (remainingTime > 0)
+                TimeChanged?.Invoke(remainingTime);
+            else if (remainingTime <= 0)
+                isTimeOn = false;
+
+            if (isTimeOn == false)
+            {
+                TimeChanged?.Invoke(_chargeTime);
+                VampirismFinished?.Invoke();
+                _isCharged = false;
+            }
+        }
+    }
+
+    private IEnumerator Charging()
+    {
+        bool isTimeOn = true;
+        float remainingTime = _chargeTime;
+        _IsCoroutineWorking = false;
+
+        while (isTimeOn)
+        {
+            yield return _delay;
+
+            remainingTime -= 1f;
+
+            if (remainingTime > 0)
+                TimeChanged?.Invoke(remainingTime);
+            else if (remainingTime <= 0)
+                isTimeOn = false;
+
+            if (isTimeOn == false)
+            {
+                TimeChanged?.Invoke(_actionTime);
+                ChargingFinished?.Invoke();
+                _isCharged = true;
+            }
+        }
+    }
+
+    private void Pump()
+    {
+        if (_health.IsHealthNotFull && _target.IsHealthAboveZero())
+        {
+            _target.TakeDamage(_pumpValue);
+            HealthPumped?.Invoke(_pumpValue);
+        }
     }
 }

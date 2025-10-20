@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2186434023755168333}
   - component: {fileID: 8334055194277671448}
-  - component: {fileID: 354526569845480801}
   - component: {fileID: 9023254691109521428}
   - component: {fileID: 7591472775307150432}
   m_Layer: 0
@@ -50,21 +49,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _trigger: {fileID: 516383894066108216}
   _health: {fileID: -2156954323717555709}
---- !u!114 &354526569845480801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982615089243561318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44678b14242496b4e8818ef8ff09d5d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputReader: {fileID: 5619640672105527678}
-  _actionTime: 6
-  _chargeTime: 4
 --- !u!114 &9023254691109521428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,7 +61,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0f3fb56c7aa244c889c93bffc11cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 5619640672105527678}
   _health: {fileID: -2156954323717555709}
+  _actionTime: 6
+  _chargeTime: 4
   _pumpValue: 0.1
 --- !u!114 &7591472775307150432
 MonoBehaviour:
@@ -856,13 +843,13 @@ PrefabInstance:
       value: VampirismUI
       objectReference: {fileID: 0}
     - target: {fileID: 6886869440646517359, guid: 4bf2f62445832ca4ca24448565f9ed40, type: 3}
-      propertyPath: _vampirismCounter
+      propertyPath: _vampirism
       value: 
-      objectReference: {fileID: 354526569845480801}
+      objectReference: {fileID: 9023254691109521428}
     - target: {fileID: 8739838822360093793, guid: 4bf2f62445832ca4ca24448565f9ed40, type: 3}
-      propertyPath: _vampirismCounter
+      propertyPath: _vampirism
       value: 
-      objectReference: {fileID: 354526569845480801}
+      objectReference: {fileID: 9023254691109521428}
     m_RemovedComponents:
     - {fileID: 992780886121977736, guid: 4bf2f62445832ca4ca24448565f9ed40, type: 3}
     m_RemovedGameObjects: []

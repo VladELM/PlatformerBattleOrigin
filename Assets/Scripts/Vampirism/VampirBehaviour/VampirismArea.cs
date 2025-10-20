@@ -11,7 +11,7 @@ public class VampirismArea : MonoBehaviour
     private void Awake()
     {
         _isVampirism = false;
-        SwitchCollider(_isVampirism);
+        //SwitchCollider(_isVampirism);
         SwitchBorderImage(_isVampirism);
     }
 
@@ -19,7 +19,7 @@ public class VampirismArea : MonoBehaviour
     {
         _isVampirism = !_isVampirism;
 
-        SwitchCollider(_isVampirism);
+        //SwitchCollider(_isVampirism);
         SwitchBorderImage(_isVampirism);
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VampirismText : MonoBehaviour
 {
-    [SerializeField] private VampirismCounter _vampirismCounter;
+    [SerializeField] private Vampirism _vampirism;
 
     private TMP_Text _text;
 
@@ -15,12 +15,12 @@ public class VampirismText : MonoBehaviour
 
     private void OnEnable()
     {
-        _vampirismCounter.TimeChanged += SetText;
+        _vampirism.TimeChanged += SetText;
     }
 
     private void OnDisable()
     {
-        _vampirismCounter.TimeChanged -= SetText;
+        _vampirism.TimeChanged -= SetText;
     }
 
     private void SetText(float time)

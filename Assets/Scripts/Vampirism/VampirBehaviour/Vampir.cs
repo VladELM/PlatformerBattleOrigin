@@ -1,32 +1,95 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Vampir : MonoBehaviour
 {
-    [SerializeField] private float _vampirismDamage;
+    [SerializeField] private InputReader _inputReader;
+    [SerializeField] private float _actionTime;
+    [SerializeField] private float _chargeTime;
 
-    private List<IDamageable> _enemies;
+    private WaitForSeconds _delay = new WaitForSeconds(1);
+    private bool _isCharged;
+    private bool _IsCoroutineWorking;
+
+    public event Action<float> TimeChanged;
+    public event Action VampirismStarted;
+    public event Action VampirismFinished;
+    public event Action ChargingFinished;
 
     private void Start()
     {
-        _enemies = new List<IDamageable>();
-        StartCoroutine(Pamping());
+        _isCharged = true;
+        TimeChanged?.Invoke(_actionTime);
+        _IsCoroutineWorking = false;
     }
 
-    public void AddToList(IDamageable enemy)
+    private void Update()
     {
-        _enemies.Add(enemy);
-    }
-
-    private IEnumerator Pamping()
-    {
-        yield return null;
-
-        if (_enemies.Count > 0)
+        if (_isCharged && _IsCoroutineWorking == false)
         {
-            for (int i = 0; i < _enemies.Count; i++)
-                _enemies[i].TakeDamage(_vampirismDamage);
+            if (_inputReader.IsVampirism)
+            {
+                _IsCoroutineWorking = true;
+                StartCoroutine(Vampiring());
+            }
+        }
+        else if (_isCharged == false && _IsCoroutineWorking)
+        {
+            StartCoroutine(Charging());
+        }
+    }
+
+    private IEnumerator Vampiring()
+    {
+        bool isTimeOn = true;
+        float remainingTime = _actionTime;
+        VampirismStarted?.Invoke();
+
+        while (isTimeOn)
+        {
+            yield return _delay;
+
+            remainingTime -= 1f;
+
+            if (remainingTime > 0)
+                TimeChanged?.Invoke(remainingTime);
+            else if (remainingTime <= 0)
+                isTimeOn = false;
+
+            if (isTimeOn == false)
+            {
+                TimeChanged?.Invoke(_chargeTime);
+                VampirismFinished?.Invoke();
+                _isCharged = false;
+            }
+        }
+    }
+
+    private IEnumerator Charging()
+    {
+        bool isTimeOn = true;
+        float remainingTime = _chargeTime;
+        _IsCoroutineWorking = false;
+
+        while (isTimeOn)
+        {
+            yield return _delay;
+
+            remainingTime -= 1f;
+
+            if (remainingTime > 0)
+                TimeChanged?.Invoke(remainingTime);
+            else if (remainingTime <= 0)
+                isTimeOn = false;
+
+            if (isTimeOn == false)
+            {
+                TimeChanged?.Invoke(_actionTime);
+                ChargingFinished?.Invoke();
+                _isCharged = true;
+            }
         }
     }
 }
