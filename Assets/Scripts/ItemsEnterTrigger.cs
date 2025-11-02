@@ -2,12 +2,7 @@ using UnityEngine;
 
 public class ItemsEnterTrigger : MonoBehaviour
 {
-    private ItemsCollector _itemsCollector;
-
-    private void Start()
-    {
-        _itemsCollector = GetComponent<ItemsCollector>();
-    }
+    [SerializeField] private ItemsCollector _itemsCollector;
 
     private void OnTriggerEnter2D(Collider2D collider)
     {

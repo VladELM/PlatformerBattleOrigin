@@ -1,18 +1,17 @@
 using UnityEngine;
 
 [RequireComponent (typeof(Jumper))]
-[RequireComponent (typeof(Flipper))]
 [RequireComponent(typeof(ItemsCollector))]
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private Flipper _rotator;
     [SerializeField] private PlayerAnimator _playerAnimator;
+    [SerializeField] private Health _playerHealth;
 
     private Jumper _jumper;
     private InputReader _inputReader;
     private Mover _mover;
-    private Health _playerHealth;
     private CoinsCounter _coinsCount;
     private ItemsCollector _itemsCollector;
     private PlayerAttacker _playerAttacker;
@@ -25,7 +24,6 @@ public class Player : MonoBehaviour
         _inputReader = GetComponent<InputReader>();
         _jumper = GetComponent<Jumper>();
         _mover = GetComponent<Mover>();
-        _playerHealth = GetComponent<Health>();
         _coinsCount = GetComponent<CoinsCounter>();
         _itemsCollector = GetComponent<ItemsCollector>();
         _playerAttackCollider = GetComponent<PlayerAttackCollider>();

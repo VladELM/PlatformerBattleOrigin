@@ -7,7 +7,7 @@ public class CoinExitTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out ItemsCollector itemsCollector))
+        if (other.transform.parent.TryGetComponent(out ItemsCollector itemsCollector))
             Exited?.Invoke();
     }
 }

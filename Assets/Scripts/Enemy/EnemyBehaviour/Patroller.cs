@@ -67,7 +67,7 @@ public class Patroller : MonoBehaviour
 
         if (hit.collider)
         {
-            if (hit.collider.TryGetComponent(out Player player))
+            if (hit.collider.transform.parent.TryGetComponent(out Player player))
             {
                 HauntTargetDetected?.Invoke();
                 HauntTargetGot?.Invoke(player.transform);

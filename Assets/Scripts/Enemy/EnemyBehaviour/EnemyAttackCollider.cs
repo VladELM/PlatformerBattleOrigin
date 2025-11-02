@@ -21,9 +21,9 @@ public class EnemyAttackCollider : MonoBehaviour
     {
         if (_isCollisionPossible)
         {
-            if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
+            if (collision.gameObject.TryGetComponent(out AttackComponent attackComponent))
             {
-                if (attackTrigger.TryGetComponent(out Health playerHealth))
+                if (attackComponent.TryGetComponent(out Health playerHealth))
                 {
                     AttackTargetGot?.Invoke(playerHealth);
                     TargetPositionXGot?.Invoke(DirectionCalculator.GetDirection(transform.position.x,
@@ -38,14 +38,14 @@ public class EnemyAttackCollider : MonoBehaviour
     {
         if (_isCollisionPossible)
         {
-            if (collision.gameObject.TryGetComponent(out AttackComponent attackTrigger))
+            if (collision.gameObject.TryGetComponent(out AttackComponent attackComponent))
             {
-                if (attackTrigger.TryGetComponent(out Player player))
+                if (attackComponent.TryGetComponent(out Player player))
                 {
                     HostileTargetLeft?.Invoke();
 
                     if (player.gameObject.activeSelf)
-                        ExitedTargetGot?.Invoke(attackTrigger.transform);
+                        ExitedTargetGot?.Invoke(attackComponent.transform);
                     else
                         ExitedTargetLeft?.Invoke();
                 }

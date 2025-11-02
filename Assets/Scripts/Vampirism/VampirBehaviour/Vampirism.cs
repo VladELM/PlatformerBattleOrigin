@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -43,9 +42,6 @@ public class Vampirism : MonoBehaviour
         {
             StartCoroutine(Charging());
         }
-
-        if (_target != null)
-            Debug.Log("!!!");
     }
 
     public void AssigneCurrentTarget(IDamageable target)
